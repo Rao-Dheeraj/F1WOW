@@ -294,6 +294,130 @@ body::before {
     margin-top: 30px;
 }
 
+/* Championship Predictor Section */
+.predictor-section {
+    position: relative;
+    z-index: 1;
+}
+
+.predictor-card {
+    padding: 30px;
+    text-align: center;
+}
+
+.predictor-question {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.3rem;
+    margin-bottom: 30px;
+    color: var(--f1-white);
+}
+
+.predictor-options {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.predictor-btn {
+    background: rgba(255, 255, 255, 0.05);
+    border: 2px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 20px 15px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+.predictor-btn:hover {
+    background: rgba(225, 6, 0, 0.2);
+    border-color: var(--f1-red);
+    transform: scale(1.05);
+}
+
+.predictor-btn.selected {
+    background: linear-gradient(135deg, var(--f1-red) 0%, var(--f1-dark-red) 100%);
+    border-color: var(--f1-red);
+}
+
+.predictor-btn .driver-number {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--f1-red);
+}
+
+.predictor-btn.selected .driver-number {
+    color: var(--f1-white);
+}
+
+.predictor-btn .driver-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.predictor-btn .driver-team {
+    font-size: 0.75rem;
+    color: var(--f1-light-gray);
+}
+
+.predictor-results {
+    margin-top: 30px;
+    text-align: left;
+}
+
+.predictor-results h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    margin-bottom: 20px;
+    color: var(--f1-white);
+}
+
+.prediction-bars {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.prediction-bar {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+}
+
+.prediction-bar-label {
+    min-width: 150px;
+    font-size: 0.85rem;
+    color: var(--f1-silver);
+}
+
+.prediction-bar-track {
+    flex: 1;
+    height: 30px;
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: 15px;
+    overflow: hidden;
+}
+
+.prediction-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, var(--f1-red) 0%, var(--f1-dark-red) 100%);
+    border-radius: 15px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    padding-right: 12px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: var(--f1-white);
+    transition: width 0.5s ease;
+    min-width: 40px;
+}
+
 /* Articles Grid */
 .articles-grid {
     display: grid;
@@ -712,7 +836,7 @@ body::before {
 /* Standing Item */
 .standing-item {
     display: grid;
-    grid-template-columns: 40px 1fr auto;
+    grid-template-columns: 40px 50px 1fr auto;
     align-items: center;
     gap: 15px;
     padding: 12px 25px;
@@ -720,6 +844,33 @@ body::before {
     transition: all 0.3s ease;
     cursor: pointer;
 }
+
+.team-logo {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    background: var(--f1-gray);
+}
+
+.team-logo.logo-rbr { background: linear-gradient(135deg, #3671C6 0%, #1B4B8C 100%); }
+.team-logo.logo-fer { background: linear-gradient(135deg, #F91536 0%, #C91229 100%); }
+.team-logo.logo-mer { background: linear-gradient(135deg, #27F4D2 0%, #1FA89C 100%); color: #000; }
+.team-logo.logo-mcl { background: linear-gradient(135deg, #FF8700 0%, #CC6D00 100%); }
+.team-logo.logo-ast { background: linear-gradient(135deg, #229971 0%, #1A7A5A 100%); }
+.team-logo.logo-alp { background: linear-gradient(135deg, #FF87BC 0%, #CC6A97 100%); }
+.team-logo.logo-wil { background: linear-gradient(135deg, #64C4FF 0%, #509ECC 100%); }
+.team-logo.logo-rbt { background: linear-gradient(135deg, #5E8FAA 0%, #4A7388 100%); }
+.team-logo.logo-alf { background: linear-gradient(135deg, #C92D4B 0%, #A1243C 100%); }
+.team-logo.logo-haas { background: linear-gradient(135deg, #B6BABD 0%, #929597 100%); }
+.team-logo.logo-aud { background: linear-gradient(135deg, #1E1E1E 0%, #000000 100%); }
+.team-logo.logo-cad { background: linear-gradient(135deg, #E6000F 0%, #B8000C 100%); }
+.team-logo.logo-ams { background: linear-gradient(135deg, #2B4562 0%, #1A2D40 100%); }
 
 .standing-item:last-child {
     border-bottom: none;

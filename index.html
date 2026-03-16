@@ -66,6 +66,53 @@
         </section>
 
         <div class="container content-section">
+            <!-- Championship Predictor Section -->
+            <section class="predictor-section" style="margin-bottom: 50px;">
+                <div class="section-header">
+                    <h2>🏆 Championship Predictor</h2>
+                    <span class="race-count">2026 Season</span>
+                </div>
+                <div class="predictor-card glass-card">
+                    <p class="predictor-question">Who will win the 2026 Drivers' Championship?</p>
+                    <div class="predictor-options" id="predictorOptions">
+                        <button class="predictor-btn" data-driver="max">
+                            <span class="driver-number">1</span>
+                            <span class="driver-name">Max Verstappen</span>
+                            <span class="driver-team">Red Bull</span>
+                        </button>
+                        <button class="predictor-btn" data-driver="leclerc">
+                            <span class="driver-number">16</span>
+                            <span class="driver-name">Charles Leclerc</span>
+                            <span class="driver-team">Ferrari</span>
+                        </button>
+                        <button class="predictor-btn" data-driver="hamilton">
+                            <span class="driver-number">44</span>
+                            <span class="driver-name">Lewis Hamilton</span>
+                            <span class="driver-team">Ferrari</span>
+                        </button>
+                        <button class="predictor-btn" data-driver="russell">
+                            <span class="driver-number">63</span>
+                            <span class="driver-name">George Russell</span>
+                            <span class="driver-team">Mercedes</span>
+                        </button>
+                        <button class="predictor-btn" data-driver="norris">
+                            <span class="driver-number">4</span>
+                            <span class="driver-name">Lando Norris</span>
+                            <span class="driver-team">McLaren</span>
+                        </button>
+                        <button class="predictor-btn" data-driver="antonelli">
+                            <span class="driver-number">12</span>
+                            <span class="driver-name">Kimi Antonelli</span>
+                            <span class="driver-team">Mercedes</span>
+                        </button>
+                    </div>
+                    <div class="predictor-results" id="predictorResults" style="display: none;">
+                        <h3>Fan Predictions</h3>
+                        <div class="prediction-bars" id="predictionBars"></div>
+                    </div>
+                </div>
+            </section>
+
             <!-- Articles Grid -->
             <section class="articles-section">
                 <div class="section-header">

@@ -26,6 +26,43 @@ const teamColors = {
     'Cadillac': 'team-haas'
 };
 
+// Team logo mapping (2026 teams)
+const teamLogos = {
+    'Red Bull Racing': 'logo-rbr',
+    'Ferrari': 'logo-fer',
+    'Mercedes': 'logo-mer',
+    'McLaren': 'logo-mcl',
+    'Aston Martin': 'logo-ast',
+    'Alpine': 'logo-alp',
+    'Williams': 'logo-wil',
+    'RB': 'logo-rbt',
+    'Racing Bulls': 'logo-rbt',
+    'AlphaTauri': 'logo-rbt',
+    'Sauber': 'logo-alf',
+    'Audi': 'logo-aud',
+    'Haas F1 Team': 'logo-haas',
+    'Haas': 'logo-haas',
+    'Cadillac': 'logo-cad'
+};
+
+// Team short names for logos
+const teamShortNames = {
+    'Red Bull Racing': 'RBR',
+    'Ferrari': 'FER',
+    'Mercedes': 'MER',
+    'McLaren': 'MCL',
+    'Aston Martin': 'AST',
+    'Alpine': 'ALP',
+    'Williams': 'WIL',
+    'RB': 'RBT',
+    'Racing Bulls': 'RBT',
+    'Sauber': 'SAU',
+    'Audi': 'AUD',
+    'Haas F1 Team': 'HAA',
+    'Haas': 'HAA',
+    'Cadillac': 'CAD'
+};
+
 // 2026 Race Calendar
 const RACE_SCHEDULE_2026 = [
     { round: 1, name: 'Australia', location: 'Melbourne', date: 'Mar 6-8', completed: true, winner: 'George Russell', sprint: false },
@@ -240,14 +277,15 @@ function displayFallbackStandings(container, type) {
 
     const data = fallbackData[type];
     const html = data.map(item => {
-        const colorClass = teamColors[item.team] || teamColors[item.name] || '';
+        const logoClass = teamLogos[item.team] || teamLogos[item.name] || '';
+        const shortName = teamShortNames[item.team] || teamShortNames[item.name] || item.name.substring(0, 3).toUpperCase();
         const displayTeam = type === 'driver' ? item.team : '';
 
         return `
             <div class="standing-item">
                 <div class="standing-position">${item.position}</div>
+                ${logoClass ? `<div class="team-logo ${logoClass}">${shortName}</div>` : `<div class="team-logo">${shortName.substring(0,3)}</div>`}
                 <div class="standing-info">
-                    ${colorClass ? `<div class="team-color ${colorClass}"></div>` : '<div class="team-color" style="background: var(--f1-gray);"></div>'}
                     <div>
                         <div class="standing-name">${item.name}</div>
                         ${displayTeam ? `<div style="font-size: 0.75rem; color: var(--f1-light-gray);">${displayTeam}</div>` : ''}
@@ -326,7 +364,80 @@ document.addEventListener('DOMContentLoaded', () => {
     loadRaceSchedule();
     fetchInstagramFollowers();
     startCountdown();
+    initPredictor();
 });
+
+// Championship Predictor
+function initPredictor() {
+    const buttons = document.querySelectorAll('.predictor-btn');
+    const resultsSection = document.getElementById('predictorResults');
+    const predictionBars = document.getElementById('predictionBars');
+
+    // Load saved predictions from localStorage
+    const savedPredictions = JSON.parse(localStorage.getItem('f1Predictions') || '{}');
+
+    buttons.forEach(btn => {
+        const driver = btn.dataset.driver;
+
+        // Show previously voted state
+        if (savedPredictions[driver]) {
+            btn.classList.add('selected');
+        }
+
+        btn.addEventListener('click', () => {
+            // Toggle selection
+            btn.classList.toggle('selected');
+
+            // Update predictions
+            if (btn.classList.contains('selected')) {
+                savedPredictions[driver] = true;
+            } else {
+                delete savedPredictions[driver];
+            }
+
+            localStorage.setItem('f1Predictions', JSON.stringify(savedPredictions));
+            showPredictions(savedPredictions);
+        });
+    });
+
+    // Show results if there are any predictions
+    if (Object.keys(savedPredictions).length > 0) {
+        showPredictions(savedPredictions);
+    }
+
+    function showPredictions(predictions) {
+        const driverNames = {
+            'max': 'Max Verstappen',
+            'leclerc': 'Charles Leclerc',
+            'hamilton': 'Lewis Hamilton',
+            'russell': 'George Russell',
+            'norris': 'Lando Norris',
+            'antonelli': 'Kimi Antonelli'
+        };
+
+        resultsSection.style.display = 'block';
+        predictionBars.innerHTML = '';
+
+        const total = Object.keys(predictions).length;
+        if (total === 0) {
+            resultsSection.style.display = 'none';
+            return;
+        }
+
+        Object.keys(predictions).forEach(driver => {
+            const percentage = Math.round((1 / total) * 100);
+            const bar = document.createElement('div');
+            bar.className = 'prediction-bar';
+            bar.innerHTML = `
+                <div class="prediction-bar-label">${driverNames[driver]}</div>
+                <div class="prediction-bar-track">
+                    <div class="prediction-bar-fill" style="width: ${percentage}%">${percentage}%</div>
+                </div>
+            `;
+            predictionBars.appendChild(bar);
+        });
+    }
+}
 
 // Countdown Timer for Next Race (Japanese GP 2026 - March 27-29)
 function startCountdown() {
