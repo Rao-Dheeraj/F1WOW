@@ -26,27 +26,26 @@ const teamColors = {
     'Cadillac': 'team-haas'
 };
 
-// Team logo URLs - using PNG sources
+// Team logo data URIS - base64 encoded SVG logos
 const teamLogos = {
-    'Red Bull Racing': 'https://www.formula1.com/content/dam/fom-website/2018-red-bull-racing/RedBull_Racing_Logo_1000px.png.transform/6col/image.png',
-    'Ferrari': 'https://www.formula1.com/content/dam/fom-website/2018-scuderia-ferrari/Scuderia_Ferrari_Logo_1000px.png.transform/6col/image.png',
-    'Mercedes': 'https://www.formula1.com/content/dam/fom-website/2018-mercedes/Mercedes_Brand_Logo_1000px.png.transform/6col/image.png',
-    'McLaren': 'https://www.formula1.com/content/dam/fom-website/2018-mclaren/McLaren_Racing_Logo_1000px.png.transform/6col/image.png',
-    'Aston Martin': 'https://www.formula1.com/content/dam/fom-website/2023-aston-martin/Aston_Martin_Armadillo_Logo_1000px.png.transform/6col/image.png',
-    'Alpine': 'https://www.formula1.com/content/dam/fom-website/2021-alpine/Alpine_Alpine_Logo_1000px.png.transform/6col/image.png',
-    'Williams': 'https://www.formula1.com/content/dam/fom-website/2018-williams/Williams_Racing_Logo_1000px.png.transform/6col/image.png',
-    'RB': 'https://www.formula1.com/content/dam/fom-website/2023-VISA-Cash-App-RB-F1-Team/VISA_Cash_App_RB_F1_Team_Logo_1000px.png.transform/6col/image.png',
-    'Racing Bulls': 'https://www.formula1.com/content/dam/fom-website/2023-VISA-Cash-App-RB-F1-Team/VISA_Cash_App_RB_F1_Team_Logo_1000px.png.transform/6col/image.png',
-    'AlphaTauri': 'https://www.formula1.com/content/dam/fom-website/2023-VISA-Cash-App-RB-F1-Team/VISA_Cash_App_RB_F1_Team_Logo_1000px.png.transform/6col/image.png',
-    'Sauber': 'https://www.formula1.com/content/dam/fom-website/2023-stake/Stake_F1_Team_Logo_1000px.png.transform/6col/image.png',
-    'Audi': 'https://www.formula1.com/content/dam/fom-website/2026-audi/Audi_Sauber_Logo_1000px.png.transform/6col/image.png',
-    'Haas F1 Team': 'https://www.formula1.com/content/dam/fom-website/2024-moneygram-haas-f1-team/Moneygram_Haas_F1_Team_Logo_1000px.png.transform/6col/image.png',
-    'Haas': 'https://www.formula1.com/content/dam/fom-website/2024-moneygram-haas-f1-team/Moneygram_Haas_F1_Team_Logo_1000px.png.transform/6col/image.png',
-    'Cadillac': 'https://www.formula1.com/content/dam/fom-website/2026-general/Cadillac_F1_Logo_1000px.png.transform/6col/image.png'
+    'Red Bull Racing': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzM2NzFDNiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+UkI8L3RleHQ+PHRleHQgeD0iMTAiIHk9IjU1IiBmaWxsPSIjMzY3MUM2IiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iYm9sZCI+UmQgQnVsbDwvdGV4dD48L3N2Zz4=',
+    'Ferrari': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0Y5MTUzNiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+RkVSUkFSSTwvdGV4dD48L3N2Zz4=',
+    'Mercedes': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzI3RjREMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TUVSRURFUzwvdGV4dD48L3N2Zz4=',
+    'McLaren': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0ZGODcwMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TUNMQVJFTjwvdGV4dD48L3N2Zz4=',
+    'Aston Martin': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzIyOTk3MSIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+QVNUT048L3RleHQ+PC9zdmc+',
+    'Alpine': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0ZGODVCQyIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+QUxQSU5FPC90ZXh0Pjwvc3ZnPg==',
+    'Williams': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzY0QzRGRiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+V0lMTElQUU8L3RleHQ+PC9zdmc+',
+    'RB': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzVFODlBQSIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+UkI8L3RleHQ+PC9zdmc+',
+    'Racing Bulls': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzVFODlBQSIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+UkI8L3RleHQ+PC9zdmc+',
+    'Sauber': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzUyRTI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+UFRJS08vdGV4dD48L3N2Zz4=',
+    'Audi': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzIyMjIyMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+QVVESTwvdGV4dD48L3N2Zz4=',
+    'Haas F1 Team': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0I2QkFCQkQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmb250LWZhbWlseT0iQXJpYWwiPkhBQVM8L3RleHQ+PC9zdmc+',
+    'Haas': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0I2QkFCQkQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmb250LWZhbWlseT0iQXJpYWwiPkhBQVM8L3RleHQ+PC9zdmc+',
+    'Cadillac': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0U2MDAxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+Q0FESUxBQzwvdGV4dD48L3N2Zz4='
 };
 
-// Fallback logo if not found
-const fallbackLogo = 'https://www.formula1.com/content/dam/fom-website/2023-stake/Stake_F1_Team_Logo_1000px.png.transform/6col/image.png';
+// Fallback logo
+const fallbackLogo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzlGOTQ5OCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+RjE8L3RleHQ+PC9zdmc+';
 
 // 2026 Race Calendar
 const RACE_SCHEDULE_2026 = [
