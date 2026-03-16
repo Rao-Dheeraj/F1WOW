@@ -638,3 +638,368 @@ function formatNumber(num) {
     }
     return num.toString();
 }
+
+// ============================================
+// PREDICTOR GAME
+// ============================================
+
+// Driver list for 2026
+const DRIVERS_2026 = [
+    { name: 'Max Verstappen', team: 'Red Bull Racing' },
+    { name: 'Lando Norris', team: 'McLaren' },
+    { name: 'Charles Leclerc', team: 'Ferrari' },
+    { name: 'Oscar Piastri', team: 'McLaren' },
+    { name: 'Lewis Hamilton', team: 'Ferrari' },
+    { name: 'George Russell', team: 'Mercedes' },
+    { name: 'Kimi Antonelli', team: 'Mercedes' },
+    { name: 'Carlos Sainz', team: 'Williams' },
+    { name: 'Fernando Alonso', team: 'Aston Martin' },
+    { name: 'Lance Stroll', team: 'Aston Martin' },
+    { name: 'Yuki Tsunoda', team: 'RB' },
+    { name: 'Liam Lawson', team: 'RB' },
+    { name: 'Pierre Gasly', team: 'Alpine' },
+    { name: 'Jack Doohan', team: 'Alpine' },
+    { name: 'Alex Albon', team: 'Williams' },
+    { name: 'Nico Hulkenberg', team: 'Audi' },
+    { name: 'Gabriel Bortoleto', team: 'Audi' },
+    { name: 'Esteban Ocon', team: 'Haas' },
+    { name: 'Oliver Bearman', team: 'Haas' },
+    { name: 'Isack Hadjar', team: 'Red Bull Racing' }
+];
+
+// Upcoming races for predictions
+const PREDICTION_RACES = RACE_SCHEDULE_2026.filter(race => !race.completed && !race.cancelled);
+
+// Initialize Predictor Game
+function initPredictorGame() {
+    initTabNavigation();
+    populateDriverDropdowns();
+    populateRaceSelector();
+    loadUserData();
+    initSubmitPrediction();
+    loadLeaderboard();
+    displayUserPredictions();
+}
+
+// Tab Navigation
+function initTabNavigation() {
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    const tabContents = document.querySelectorAll('.tab-content');
+
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+            const tabName = btn.dataset.tab;
+
+            // Update active tab button
+            tabBtns.forEach(b => b.classList.remove('active'));
+            btn.classList.add('active');
+
+            // Show corresponding content
+            tabContents.forEach(content => {
+                content.classList.remove('active');
+                if (content.id === `${tabName}-tab`) {
+                    content.classList.add('active');
+                }
+            });
+
+            // Scroll to top smoothly
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        });
+    });
+}
+
+// Populate driver dropdowns
+function populateDriverDropdowns() {
+    const firstSelect = document.getElementById('firstPlace');
+    const secondSelect = document.getElementById('secondPlace');
+    const thirdSelect = document.getElementById('thirdPlace');
+
+    const createOptions = () => {
+        return DRIVERS_2026.map(driver =>
+            `<option value="${driver.name}">${driver.name}</option>`
+        ).join('');
+    };
+
+    const options = createOptions();
+    firstSelect.innerHTML = '<option value="">Select Driver</option>' + options;
+    secondSelect.innerHTML = '<option value="">Select Driver</option>' + options;
+    thirdSelect.innerHTML = '<option value="">Select Driver</option>' + options;
+
+    // Prevent duplicate selections
+    firstSelect.addEventListener('change', () => updateDriverOptions(firstSelect, [secondSelect, thirdSelect]));
+    secondSelect.addEventListener('change', () => updateDriverOptions(secondSelect, [firstSelect, thirdSelect]));
+    thirdSelect.addEventListener('change', () => updateDriverOptions(thirdSelect, [firstSelect, secondSelect]));
+}
+
+// Update driver options to prevent duplicates
+function updateDriverOptions(changedSelect, otherSelects) {
+    const selectedValues = Array.from(document.querySelectorAll('.podium-select'))
+        .map(select => select.value)
+        .filter(val => val);
+
+    otherSelects.forEach(select => {
+        const currentValue = select.value;
+        const options = select.querySelectorAll('option');
+
+        options.forEach(option => {
+            if (option.value && option.value !== currentValue && selectedValues.includes(option.value)) {
+                option.disabled = true;
+            } else {
+                option.disabled = false;
+            }
+        });
+    });
+}
+
+// Populate race selector
+function populateRaceSelector() {
+    const raceSelect = document.getElementById('raceSelect');
+    const races = PREDICTION_RACES.filter(race => !race.cancelled);
+
+    raceSelect.innerHTML = '<option value="">-- Choose a Race --</option>' +
+        races.map(race =>
+            `<option value="${race.round}" ${race.next ? 'selected' : ''}>
+                ${race.next ? '🏁 ' : ''}Round ${race.round}: ${race.name} GP (${race.date})
+            </option>`
+        ).join('');
+}
+
+// Load user data from localStorage
+function loadUserData() {
+    const username = localStorage.getItem('f1predictor_username');
+    const userPoints = localStorage.getItem('f1predictor_points') || '0';
+
+    if (username) {
+        document.getElementById('usernameInput').value = username;
+    }
+
+    document.getElementById('userTotalPoints').textContent = userPoints;
+
+    // Save username on input
+    document.getElementById('usernameInput').addEventListener('input', (e) => {
+        localStorage.setItem('f1predictor_username', e.target.value.slice(0, 20));
+    });
+}
+
+// Submit prediction
+function initSubmitPrediction() {
+    const submitBtn = document.getElementById('submitPrediction');
+
+    submitBtn.addEventListener('click', () => {
+        const username = document.getElementById('usernameInput').value.trim();
+        const raceSelect = document.getElementById('raceSelect');
+        const firstPlace = document.getElementById('firstPlace').value;
+        const secondPlace = document.getElementById('secondPlace').value;
+        const thirdPlace = document.getElementById('thirdPlace').value;
+
+        // Validation
+        if (!username) {
+            alert('Please enter your name first!');
+            return;
+        }
+
+        if (!raceSelect.value) {
+            alert('Please select a race!');
+            return;
+        }
+
+        if (!firstPlace || !secondPlace || !thirdPlace) {
+            alert('Please select all 3 podium positions!');
+            return;
+        }
+
+        if (firstPlace === secondPlace || firstPlace === thirdPlace || secondPlace === thirdPlace) {
+            alert('Please select 3 different drivers!');
+            return;
+        }
+
+        // Get selected race info
+        const selectedRace = RACE_SCHEDULE_2026.find(r => r.round == raceSelect.value);
+
+        // Create prediction object
+        const prediction = {
+            id: Date.now(),
+            username: username,
+            raceRound: selectedRace.round,
+            raceName: selectedRace.name,
+            raceDate: selectedRace.date,
+            predictions: [firstPlace, secondPlace, thirdPlace],
+            timestamp: new Date().toISOString(),
+            points: 0,
+            status: 'pending'
+        };
+
+        // Save prediction
+        savePrediction(prediction);
+
+        // Update UI
+        displayUserPredictions();
+        updateTotalPoints();
+
+        // Reset form
+        document.getElementById('firstPlace').value = '';
+        document.getElementById('secondPlace').value = '';
+        document.getElementById('thirdPlace').value = '';
+
+        // Show success message
+        showSuccessMessage();
+    });
+}
+
+// Save prediction to localStorage
+function savePrediction(prediction) {
+    let predictions = JSON.parse(localStorage.getItem('f1predictor_predictions') || '[]');
+
+    // Check if user already has a prediction for this race
+    const existingIndex = predictions.findIndex(p =>
+        p.username === prediction.username && p.raceRound === prediction.raceRound
+    );
+
+    if (existingIndex >= 0) {
+        predictions[existingIndex] = prediction;
+    } else {
+        predictions.push(prediction);
+    }
+
+    localStorage.setItem('f1predictor_predictions', JSON.stringify(predictions));
+}
+
+// Show success message
+function showSuccessMessage() {
+    const submitBtn = document.getElementById('submitPrediction');
+    const originalHTML = submitBtn.innerHTML;
+
+    submitBtn.innerHTML = `
+        <svg viewBox="0 0 24 24" fill="currentColor">
+            <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
+        </svg>
+        Prediction Saved!
+    `;
+    submitBtn.style.background = 'linear-gradient(135deg, #27F4D2 0%, #1FA89C 100%)';
+
+    setTimeout(() => {
+        submitBtn.innerHTML = originalHTML;
+        submitBtn.style.background = '';
+    }, 2000);
+}
+
+// Display user predictions
+function displayUserPredictions() {
+    const container = document.getElementById('userPredictions');
+    const username = localStorage.getItem('f1predictor_username');
+
+    if (!username) {
+        container.innerHTML = '<p style="color: var(--f1-light-gray); text-align: center;">Enter your name to see your predictions.</p>';
+        return;
+    }
+
+    const predictions = JSON.parse(localStorage.getItem('f1predictor_predictions') || '[]');
+    const userPredictions = predictions.filter(p => p.username === username);
+
+    if (userPredictions.length === 0) {
+        container.innerHTML = '<p style="color: var(--f1-light-gray); text-align: center;">No predictions yet. Make your first prediction above!</p>';
+        return;
+    }
+
+    container.innerHTML = userPredictions.map(p => `
+        <div class="prediction-item ${p.status}">
+            <div class="prediction-race">
+                <div class="prediction-race-name">${p.raceName} GP - ${p.raceDate}</div>
+                <div class="prediction-drivers">
+                    <span>
+                        <svg class="medal" viewBox="0 0 24 24" fill="#FFD700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        ${p.predictions[0]}
+                    </span>
+                    <span>
+                        <svg class="medal" viewBox="0 0 24 24" fill="#C0C0C0"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        ${p.predictions[1]}
+                    </span>
+                    <span>
+                        <svg class="medal" viewBox="0 0 24 24" fill="#CD7F32"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
+                        ${p.predictions[2]}
+                    </span>
+                </div>
+            </div>
+            <span class="prediction-points">${p.points > 0 ? '+' + p.points : '-'} pts</span>
+            <span class="prediction-status ${p.status}">${p.status}</span>
+        </div>
+    `).join('');
+}
+
+// Update total points
+function updateTotalPoints() {
+    const username = localStorage.getItem('f1predictor_username');
+    if (!username) return;
+
+    const predictions = JSON.parse(localStorage.getItem('f1predictor_predictions') || '[]');
+    const userPredictions = predictions.filter(p => p.username === username);
+    const totalPoints = userPredictions.reduce((sum, p) => sum + (p.points || 0), 0);
+
+    localStorage.setItem('f1predictor_points', totalPoints.toString());
+    document.getElementById('userTotalPoints').textContent = totalPoints;
+}
+
+// Load leaderboard
+function loadLeaderboard() {
+    const container = document.getElementById('leaderboard');
+    const predictions = JSON.parse(localStorage.getItem('f1predictor_predictions') || '[]');
+
+    // Calculate points for each user
+    const userPoints = {};
+    predictions.forEach(p => {
+        if (!userPoints[p.username]) {
+            userPoints[p.username] = 0;
+        }
+        userPoints[p.username] += p.points || 0;
+    });
+
+    // Add some sample leaderboard data if empty
+    if (Object.keys(userPoints).length === 0) {
+        const sampleUsers = [
+            { name: 'Tifosi_Fan', points: 125 },
+            { name: 'MaxVer33', points: 98 },
+            { name: 'LewisFan7', points: 87 },
+            { name: 'F1Expert', points: 75 },
+            { name: 'RaceWinner', points: 62 }
+        ];
+
+        sampleUsers.forEach(user => {
+            userPoints[user.name] = user.points;
+        });
+    }
+
+    // Convert to array and sort
+    const leaderboard = Object.entries(userPoints)
+        .map(([name, points]) => ({ name, points }))
+        .sort((a, b) => b.points - a.points)
+        .slice(0, 10);
+
+    // Get current user
+    const currentUser = localStorage.getItem('f1predictor_username');
+
+    container.innerHTML = leaderboard.map((entry, index) => {
+        const positionClass = index === 0 ? 'gold' : index === 1 ? 'silver' : index === 2 ? 'bronze' : '';
+        const isCurrentUser = entry.name === currentUser;
+
+        return `
+            <div class="leaderboard-item ${isCurrentUser ? 'current-user' : ''}">
+                <div class="leaderboard-position ${positionClass}">${index + 1}</div>
+                <div class="leaderboard-name ${isCurrentUser ? 'current' : ''}">${entry.name}${isCurrentUser ? ' (You)' : ''}</div>
+                <div class="leaderboard-points">${entry.points}</div>
+            </div>
+        `;
+    }).join('');
+}
+
+// Initialize everything
+document.addEventListener('DOMContentLoaded', () => {
+    fetchDriverStandings();
+    fetchConstructorStandings();
+    loadRaceSchedule();
+    fetchInstagramFollowers();
+    startCountdown();
+    initSearch();
+    initBackToTop();
+    initScrollAnimations();
+    initPredictorGame(); // Add predictor game initialization
+});
