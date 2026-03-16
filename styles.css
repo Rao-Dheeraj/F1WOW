@@ -274,27 +274,29 @@ body::before {
     background: rgba(255, 255, 255, 0.05);
     backdrop-filter: blur(10px);
     border: 1px solid rgba(255, 255, 255, 0.1);
-    border-radius: 12px;
-    padding: 8px 16px;
+    border-radius: 8px;
+    padding: 6px 12px;
     display: flex;
     align-items: center;
-    gap: 10px;
+    gap: 8px;
     transition: all 0.3s ease;
+    height: fit-content;
 }
 
 .hero-predictor:hover {
+    transform: translateY(-2px);
     border-color: var(--f1-red);
     box-shadow: 0 5px 15px rgba(225, 6, 0, 0.15);
 }
 
 .hero-predictor-badge {
-    font-size: 1.2rem;
+    font-size: 0.9rem;
 }
 
 .hero-predictor-text {
     font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem;
-    font-weight: 600;
+    font-size: 0.5rem;
+    font-weight: 700;
     color: var(--f1-white);
     text-transform: uppercase;
     letter-spacing: 0.5px;
@@ -303,15 +305,15 @@ body::before {
 .hero-predictor-btn {
     background: linear-gradient(135deg, var(--f1-red) 0%, var(--f1-dark-red) 100%);
     border: none;
-    border-radius: 6px;
-    padding: 4px 12px;
-    font-size: 0.65rem;
+    border-radius: 4px;
+    padding: 2px 8px;
+    font-size: 0.5rem;
     font-weight: 600;
     color: var(--f1-white);
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 0.3px;
 }
 
 .hero-predictor-btn:hover {
@@ -371,8 +373,8 @@ body::before {
 .search-container {
     display: flex;
     align-items: center;
-    gap: 15px;
-    padding: 20px 25px;
+    gap: 10px;
+    padding: 10px 15px;
     position: relative;
 }
 
@@ -380,6 +382,8 @@ body::before {
     color: var(--f1-light-gray);
     display: flex;
     align-items: center;
+    width: 16px;
+    height: 16px;
 }
 
 .search-input {
@@ -388,9 +392,9 @@ body::before {
     border: none;
     outline: none;
     font-family: 'Roboto', sans-serif;
-    font-size: 1rem;
+    font-size: 0.85rem;
     color: var(--f1-white);
-    padding: 10px 0;
+    padding: 5px 0;
 }
 
 .search-input::placeholder {
@@ -401,12 +405,15 @@ body::before {
     background: rgba(255, 255, 255, 0.1);
     border: none;
     color: var(--f1-light-gray);
-    width: 30px;
-    height: 30px;
+    width: 22px;
+    height: 22px;
     border-radius: 50%;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 0.8rem;
     transition: all 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .search-clear:hover {
@@ -417,8 +424,8 @@ body::before {
 .search-tags {
     display: flex;
     flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 15px;
+    gap: 8px;
+    margin-top: 10px;
     justify-content: center;
 }
 
@@ -426,13 +433,13 @@ body::before {
     background: rgba(255, 255, 255, 0.05);
     border: 1px solid rgba(255, 255, 255, 0.1);
     color: var(--f1-light-gray);
-    padding: 8px 18px;
-    border-radius: 20px;
-    font-size: 0.8rem;
+    padding: 5px 12px;
+    border-radius: 15px;
+    font-size: 0.7rem;
     cursor: pointer;
     transition: all 0.3s ease;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.5px;
 }
 
 .search-tag:hover,
