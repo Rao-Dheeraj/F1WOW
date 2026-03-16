@@ -415,6 +415,16 @@ function initSearch() {
     const searchTags = document.querySelectorAll('.search-tag');
     const searchResults = document.getElementById('searchResults');
     const articlesGrid = document.getElementById('articlesGrid');
+    const searchToggle = document.getElementById('searchToggle');
+    const searchFilters = document.getElementById('searchFilters');
+
+    // Search toggle button
+    if (searchToggle && searchFilters) {
+        searchToggle.addEventListener('click', () => {
+            searchFilters.classList.toggle('expanded');
+            searchToggle.classList.toggle('active');
+        });
+    }
 
     // Store article data for search
     const articles = Array.from(articlesGrid.querySelectorAll('.article-preview-card')).map(card => ({
@@ -993,6 +1003,53 @@ let selectedConstructors = ['mercedes', 'ferrari', 'mclaren', 'redBull'];
 
 console.log('CHAMPIONSHIP_DATA_2026 loaded:', CHAMPIONSHIP_DATA_2026);
 
+// Category Tabs Filter
+function initCategoryTabs() {
+    const categoryTabs = document.querySelectorAll('.category-tab');
+    const articlesGrid = document.getElementById('articlesGrid');
+    const articlesCount = document.getElementById('articlesCount');
+
+    if (!articlesGrid || categoryTabs.length === 0) return;
+
+    // Get all article cards
+    const articles = Array.from(articlesGrid.querySelectorAll('.article-preview-card'));
+
+    categoryTabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+            const category = tab.dataset.category;
+
+            // Update active tab
+            categoryTabs.forEach(t => t.classList.remove('active'));
+            tab.classList.add('active');
+
+            // Filter articles
+            let visibleCount = 0;
+
+            articles.forEach(article => {
+                if (category === 'all') {
+                    article.style.display = 'flex';
+                    visibleCount++;
+                } else {
+                    const categoryEl = article.querySelector('.preview-category');
+                    const articleCategory = categoryEl?.textContent.toLowerCase() || '';
+
+                    if (articleCategory.includes(category)) {
+                        article.style.display = 'flex';
+                        visibleCount++;
+                    } else {
+                        article.style.display = 'none';
+                    }
+                }
+            });
+
+            // Update count
+            if (articlesCount) {
+                articlesCount.textContent = visibleCount;
+            }
+        });
+    });
+}
+
 // Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
     fetchDriverStandings();
@@ -1003,6 +1060,7 @@ document.addEventListener('DOMContentLoaded', () => {
     initSearch();
     initBackToTop();
     initScrollAnimations();
+    initCategoryTabs();
     initPredictorGame();
     initChampionshipGraph();
 });

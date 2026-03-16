@@ -93,19 +93,25 @@
             </div>
         </section>
 
-        <div class="container content-section">
-            <!-- Search Section -->
-            <section class="search-section">
-                <div class="search-container glass-card">
-                    <div class="search-icon">
-                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                            <circle cx="11" cy="11" r="8"></circle>
-                            <path d="M21 21l-4.35-4.35"></path>
-                        </svg>
-                    </div>
-                    <input type="text" id="searchInput" placeholder="Search articles, drivers, races..." class="search-input">
-                    <button class="search-clear" id="searchClear" style="display: none;">✕</button>
+        <!-- Compact Search Bar -->
+        <div class="compact-search-wrapper">
+            <div class="compact-search-container">
+                <div class="search-icon">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"></circle>
+                        <path d="M21 21l-4.35-4.35"></path>
+                    </svg>
                 </div>
+                <input type="text" id="searchInput" placeholder="Search articles, drivers, races..." class="search-input">
+                <button class="search-toggle" id="searchToggle" title="Filter options">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 6h16M4 12h16M4 18h7"/>
+                    </svg>
+                </button>
+                <button class="search-clear" id="searchClear" style="display: none;">✕</button>
+            </div>
+            <!-- Expandable Filters -->
+            <div class="search-filters" id="searchFilters">
                 <div class="search-tags" id="searchTags">
                     <span class="search-tag active" data-filter="all">All</span>
                     <span class="search-tag" data-filter="news">News</span>
@@ -114,9 +120,11 @@
                     <span class="search-tag" data-filter="antonelli">Antonelli</span>
                     <span class="search-tag" data-filter="mercedes">Mercedes</span>
                 </div>
-                <div class="search-results" id="searchResults"></div>
-            </section>
+            </div>
+            <div class="search-results" id="searchResults"></div>
+        </div>
 
+        <div class="container content-section">
             <!-- Articles Grid -->
             <section class="articles-section" id="articles">
                 <div class="section-header">
@@ -151,10 +159,32 @@
                     </div>
                 </a>
 
-                <!-- More Articles Grid -->
-                <div class="section-header sub-header">
-                    <h3>More Articles</h3>
+                <!-- Category Tabs -->
+                <div class="category-tabs-wrapper">
+                    <div class="category-tabs">
+                        <button class="category-tab active" data-category="all">
+                            <span class="tab-icon">📰</span>
+                            All
+                        </button>
+                        <button class="category-tab" data-category="race">
+                            <span class="tab-icon">🏁</span>
+                            Race Reports
+                        </button>
+                        <button class="category-tab" data-category="news">
+                            <span class="tab-icon">📢</span>
+                            News
+                        </button>
+                        <button class="category-tab" data-category="technical">
+                            <span class="tab-icon">⚙️</span>
+                            Technical
+                        </button>
+                    </div>
+                    <div class="articles-count">
+                        <span id="articlesCount">4</span> articles
+                    </div>
                 </div>
+
+                <!-- More Articles Grid -->
                 <div class="articles-grid" id="articlesGrid">
                     <!-- Article 2: Verstappen -->
                     <a href="verstappen-article.html" class="article-preview-card">
