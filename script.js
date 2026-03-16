@@ -490,11 +490,38 @@ function initSearch() {
     }
 }
 
-// Championship Predictor
+// Championship Predictor Modal
 function initPredictor() {
+    const modal = document.getElementById('predictorModal');
+    const heroBtn = document.getElementById('heroPredictorBtn');
+    const closeBtn = document.getElementById('predictorClose');
     const buttons = document.querySelectorAll('.predictor-btn');
     const resultsSection = document.getElementById('predictorResults');
     const predictionBars = document.getElementById('predictionBars');
+
+    // Open modal
+    heroBtn.addEventListener('click', () => {
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
+    });
+
+    // Close modal
+    closeBtn.addEventListener('click', closeModal);
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) closeModal();
+    });
+
+    function closeModal() {
+        modal.style.display = 'none';
+        document.body.style.overflow = '';
+    }
+
+    // Close on Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && modal.style.display === 'flex') {
+            closeModal();
+        }
+    });
 
     // Load saved predictions from localStorage
     const savedPredictions = JSON.parse(localStorage.getItem('f1Predictions') || '{}');

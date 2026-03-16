@@ -43,76 +43,85 @@
                     <h1 class="hero-title">F1WOW NEWS</h1>
                     <p class="hero-subtitle">Your Ultimate Source for Formula 1 News, Results & Analysis</p>
                     <div class="next-race-name">🇯🇵 Japanese GP - Next Race</div>
-                    <div class="countdown-container" id="countdown">
-                        <div class="countdown-item">
-                            <span class="countdown-number" id="days">00</span>
-                            <span class="countdown-label">Days</span>
+                    <div class="hero-row">
+                        <!-- Compact Predictor on Left -->
+                        <div class="hero-predictor">
+                            <span class="hero-predictor-badge">🏆</span>
+                            <span class="hero-predictor-text">Champion Predictor</span>
+                            <button class="hero-predictor-btn" id="heroPredictorBtn">Vote</button>
                         </div>
-                        <div class="countdown-item">
-                            <span class="countdown-number" id="hours">00</span>
-                            <span class="countdown-label">Hours</span>
-                        </div>
-                        <div class="countdown-item">
-                            <span class="countdown-number" id="minutes">00</span>
-                            <span class="countdown-label">Mins</span>
-                        </div>
-                        <div class="countdown-item">
-                            <span class="countdown-number" id="seconds">00</span>
-                            <span class="countdown-label">Secs</span>
+                        <!-- Countdown on Right -->
+                        <div class="countdown-container" id="countdown">
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="days">00</span>
+                                <span class="countdown-label">Days</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="hours">00</span>
+                                <span class="countdown-label">Hours</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="minutes">00</span>
+                                <span class="countdown-label">Mins</span>
+                            </div>
+                            <div class="countdown-item">
+                                <span class="countdown-number" id="seconds">00</span>
+                                <span class="countdown-label">Secs</span>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </section>
 
-        <div class="container content-section">
-            <!-- Championship Predictor Section -->
-            <section class="predictor-section" style="margin-bottom: 50px;">
-                <div class="section-header">
+        <!-- Predictor Modal -->
+        <div class="predictor-modal" id="predictorModal" style="display: none;">
+            <div class="predictor-modal-content">
+                <div class="predictor-modal-header">
                     <h2>🏆 Championship Predictor</h2>
-                    <span class="race-count">2026 Season</span>
+                    <button class="predictor-close" id="predictorClose">✕</button>
                 </div>
-                <div class="predictor-card glass-card">
-                    <p class="predictor-question">Who will win the 2026 Drivers' Championship?</p>
-                    <div class="predictor-options" id="predictorOptions">
-                        <button class="predictor-btn" data-driver="max">
-                            <span class="driver-number">1</span>
-                            <span class="driver-name">Max Verstappen</span>
-                            <span class="driver-team">Red Bull</span>
-                        </button>
-                        <button class="predictor-btn" data-driver="leclerc">
-                            <span class="driver-number">16</span>
-                            <span class="driver-name">Charles Leclerc</span>
-                            <span class="driver-team">Ferrari</span>
-                        </button>
-                        <button class="predictor-btn" data-driver="hamilton">
-                            <span class="driver-number">44</span>
-                            <span class="driver-name">Lewis Hamilton</span>
-                            <span class="driver-team">Ferrari</span>
-                        </button>
-                        <button class="predictor-btn" data-driver="russell">
-                            <span class="driver-number">63</span>
-                            <span class="driver-name">George Russell</span>
-                            <span class="driver-team">Mercedes</span>
-                        </button>
-                        <button class="predictor-btn" data-driver="norris">
-                            <span class="driver-number">4</span>
-                            <span class="driver-name">Lando Norris</span>
-                            <span class="driver-team">McLaren</span>
-                        </button>
-                        <button class="predictor-btn" data-driver="antonelli">
-                            <span class="driver-number">12</span>
-                            <span class="driver-name">Kimi Antonelli</span>
-                            <span class="driver-team">Mercedes</span>
-                        </button>
-                    </div>
-                    <div class="predictor-results" id="predictorResults" style="display: none;">
-                        <h3>Fan Predictions</h3>
-                        <div class="prediction-bars" id="predictionBars"></div>
-                    </div>
+                <p class="predictor-question">Who will win the 2026 Drivers' Championship?</p>
+                <div class="predictor-options" id="predictorOptions">
+                    <button class="predictor-btn" data-driver="max">
+                        <span class="driver-number">1</span>
+                        <span class="driver-name">Max Verstappen</span>
+                        <span class="driver-team">Red Bull</span>
+                    </button>
+                    <button class="predictor-btn" data-driver="leclerc">
+                        <span class="driver-number">16</span>
+                        <span class="driver-name">Charles Leclerc</span>
+                        <span class="driver-team">Ferrari</span>
+                    </button>
+                    <button class="predictor-btn" data-driver="hamilton">
+                        <span class="driver-number">44</span>
+                        <span class="driver-name">Lewis Hamilton</span>
+                        <span class="driver-team">Ferrari</span>
+                    </button>
+                    <button class="predictor-btn" data-driver="russell">
+                        <span class="driver-number">63</span>
+                        <span class="driver-name">George Russell</span>
+                        <span class="driver-team">Mercedes</span>
+                    </button>
+                    <button class="predictor-btn" data-driver="norris">
+                        <span class="driver-number">4</span>
+                        <span class="driver-name">Lando Norris</span>
+                        <span class="driver-team">McLaren</span>
+                    </button>
+                    <button class="predictor-btn" data-driver="antonelli">
+                        <span class="driver-number">12</span>
+                        <span class="driver-name">Kimi Antonelli</span>
+                        <span class="driver-team">Mercedes</span>
+                    </button>
                 </div>
-            </section>
+                <div class="predictor-results" id="predictorResults" style="display: none;">
+                    <h3>Fan Predictions</h3>
+                    <div class="prediction-bars" id="predictionBars"></div>
+                </div>
+            </div>
+        </div>
 
+        <div class="container content-section">
             <!-- Search Section -->
             <section class="search-section">
                 <div class="search-container glass-card">

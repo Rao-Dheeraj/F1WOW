@@ -216,7 +216,6 @@ body::before {
     display: flex;
     justify-content: center;
     gap: 8px;
-    margin-top: 15px;
     flex-wrap: wrap;
 }
 
@@ -261,7 +260,67 @@ body::before {
     letter-spacing: 1px;
 }
 
-/* Glass Morphism Effect */
+/* Hero Row - Predictor and Countdown side by side */
+.hero-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 30px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+/* Compact Hero Predictor */
+.hero-predictor {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    padding: 8px 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+}
+
+.hero-predictor:hover {
+    border-color: var(--f1-red);
+    box-shadow: 0 5px 15px rgba(225, 6, 0, 0.15);
+}
+
+.hero-predictor-badge {
+    font-size: 1.2rem;
+}
+
+.hero-predictor-text {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    color: var(--f1-white);
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hero-predictor-btn {
+    background: linear-gradient(135deg, var(--f1-red) 0%, var(--f1-dark-red) 100%);
+    border: none;
+    border-radius: 6px;
+    padding: 4px 12px;
+    font-size: 0.65rem;
+    font-weight: 600;
+    color: var(--f1-white);
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.hero-predictor-btn:hover {
+    transform: scale(1.05);
+    box-shadow: 0 3px 10px rgba(225, 6, 0, 0.3);
+}
+
+/* Countdown Timer - adjusted for hero row */
 .glass-card {
     background: rgba(255, 255, 255, 0.03);
     backdrop-filter: blur(10px);
@@ -400,6 +459,122 @@ body::before {
 .predictor-section {
     position: relative;
     z-index: 1;
+}
+
+/* Predictor Modal */
+.predictor-modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    animation: fadeIn 0.3s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+.predictor-modal-content {
+    background: linear-gradient(135deg, var(--f1-dark) 0%, var(--f1-black) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 20px;
+    padding: 30px;
+    max-width: 600px;
+    width: 90%;
+    max-height: 80vh;
+    overflow-y: auto;
+    position: relative;
+    animation: slideUp 0.3s ease;
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.predictor-modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.predictor-modal-header h2 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.2rem;
+    color: var(--f1-white);
+    margin: 0;
+}
+
+.predictor-close {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--f1-white);
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1.2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+}
+
+.predictor-close:hover {
+    background: var(--f1-red);
+    transform: rotate(90deg);
+}
+
+.predictor-modal .predictor-question {
+    font-size: 1rem;
+    margin-bottom: 20px;
+}
+
+.predictor-modal .predictor-options {
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 12px;
+}
+
+.predictor-modal .predictor-btn {
+    padding: 15px 10px;
+}
+
+.predictor-modal .predictor-btn .driver-number {
+    font-size: 1.2rem;
+}
+
+.predictor-modal .predictor-btn .driver-name {
+    font-size: 0.8rem;
+}
+
+.predictor-modal .predictor-btn .driver-team {
+    font-size: 0.65rem;
+}
+
+.predictor-modal .predictor-results {
+    margin-top: 20px;
+}
+
+.predictor-modal .predictor-results h3 {
+    font-size: 0.95rem;
+    margin-bottom: 15px;
 }
 
 .predictor-card {
@@ -1237,6 +1412,18 @@ body::before {
     .nav-link span {
         display: none;
     }
+
+    /* Hero Row responsive */
+    .hero-row {
+        flex-direction: column;
+        gap: 15px;
+    }
+
+    .hero-predictor {
+        width: 100%;
+        justify-content: center;
+    }
+}
 
     .nav-link {
         padding: 10px 15px;
