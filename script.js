@@ -360,6 +360,54 @@ function loadRaceSchedule() {
     container.innerHTML = html;
 }
 
+// ============================================
+// UX IMPROVEMENTS
+// ============================================
+
+// Back to Top Button
+function initBackToTop() {
+    const backToTop = document.getElementById('backToTop');
+
+    // Show/hide button based on scroll position
+    window.addEventListener('scroll', () => {
+        if (window.pageYOffset > 300) {
+            backToTop.classList.add('visible');
+        } else {
+            backToTop.classList.remove('visible');
+        }
+    });
+
+    // Smooth scroll to top on click
+    backToTop.addEventListener('click', () => {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+}
+
+// Scroll Animations (Fade In)
+function initScrollAnimations() {
+    const fadeElements = document.querySelectorAll('.article-preview-card, .standings-card, .schedule-card, .section-header');
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible', 'fade-in');
+            }
+        });
+    }, {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    });
+
+    fadeElements.forEach((el, index) => {
+        el.classList.add('fade-in');
+        el.classList.add(`stagger-${(index % 5) + 1}`);
+        observer.observe(el);
+    });
+}
+
 // Initialize the page
 document.addEventListener('DOMContentLoaded', () => {
     fetchDriverStandings();
@@ -368,6 +416,8 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchInstagramFollowers();
     startCountdown();
     initSearch();
+    initBackToTop();
+    initScrollAnimations();
 });
 
 // Search functionality
