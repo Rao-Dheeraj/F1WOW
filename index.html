@@ -38,6 +38,16 @@
     <main class="main">
         <!-- Hero Section -->
         <section class="hero-section">
+            <!-- F1 Car GIF Background -->
+            <div class="hero-car-bg">
+                <img src="F1 car GIF.gif" alt="F1 Car" class="hero-car-gif">
+            </div>
+            <!-- Speed Lines Overlay -->
+            <div class="hero-speed-lines">
+                <div class="speed-line"></div>
+                <div class="speed-line"></div>
+                <div class="speed-line"></div>
+            </div>
             <div class="container">
                 <div class="hero-content">
                     <span class="hero-badge">🏁 2026 Season</span>
@@ -63,6 +73,18 @@
                                 <span class="countdown-label">Secs</span>
                             </div>
                         </div>
+                    </div>
+                    <!-- CTA Buttons -->
+                    <div class="hero-cta">
+                        <a href="#standings" class="cta-btn cta-primary">
+                            <span>🏆</span> Standings
+                        </a>
+                        <a href="#articles" class="cta-btn cta-secondary">
+                            <span>📰</span> Latest News
+                        </a>
+                        <a href="#schedule" class="cta-btn cta-secondary">
+                            <span>📅</span> Calendar
+                        </a>
                     </div>
                 </div>
             </div>
@@ -92,7 +114,7 @@
             </section>
 
             <!-- Articles Grid -->
-            <section class="articles-section">
+            <section class="articles-section" id="articles">
                 <div class="section-header">
                     <h2>Latest News</h2>
                     <span class="live-badge">LIVE</span>
@@ -129,11 +151,27 @@
                             </div>
                         </div>
                     </a>
+
+                    <!-- Article 3: 2026 Regulations -->
+                    <a href="regulations-2026-article.html" class="article-preview-card">
+                        <div class="article-preview-content">
+                            <div class="article-preview-meta">
+                                <span class="preview-category">Technical Analysis</span>
+                                <span class="preview-date">March 16, 2026</span>
+                            </div>
+                            <h3 class="article-preview-title">F1 2026 vs 2025 Regulations: The Complete Guide</h3>
+                            <p class="article-preview-excerpt">Power units, active aerodynamics, sustainable fuels, and new manufacturers—everything you need to know about the biggest regulatory shakeup in decades...</p>
+                            <div class="article-preview-footer">
+                                <span class="preview-driver">F1wow Team</span>
+                                <span class="preview-event">Technical Guide</span>
+                            </div>
+                        </div>
+                    </a>
                 </div>
             </section>
 
             <!-- Standings Section -->
-            <section class="standings-section">
+            <section class="standings-section" id="standings">
                 <div class="section-header">
                     <h2>Championship Standings</h2>
                 </div>
@@ -157,7 +195,7 @@
             </section>
 
             <!-- Race Schedule Section -->
-            <section class="schedule-section">
+            <section class="schedule-section" id="schedule">
                 <div class="section-header">
                     <h2>2026 Race Calendar</h2>
                     <span class="race-count">22 Rounds</span>

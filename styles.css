@@ -149,9 +149,180 @@ body::before {
 /* Hero Section */
 .hero-section {
     position: relative;
-    padding: 20px 0;
+    padding: 40px 0 50px;
     overflow: hidden;
     z-index: 1;
+    min-height: 450px;
+}
+
+/* F1 Car GIF Background */
+.hero-car-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -2;
+}
+
+.hero-car-gif {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    opacity: 0.25;
+    filter: brightness(0.7) contrast(1.1);
+}
+
+/* Speed Lines Overlay */
+.hero-speed-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.speed-line {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, rgba(225, 6, 0, 0.4), transparent);
+    animation: speedLine 2s linear infinite;
+}
+
+.speed-line:nth-child(1) {
+    top: 20%;
+    left: -50%;
+    width: 40%;
+    animation-delay: 0s;
+}
+
+.speed-line:nth-child(2) {
+    top: 50%;
+    left: -50%;
+    width: 35%;
+    animation-delay: 0.7s;
+}
+
+.speed-line:nth-child(3) {
+    top: 80%;
+    left: -50%;
+    width: 45%;
+    animation-delay: 1.4s;
+}
+
+@keyframes speedLine {
+    0% {
+        left: -50%;
+        opacity: 0;
+    }
+    20% {
+        opacity: 1;
+    }
+    80% {
+        opacity: 1;
+    }
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
+}
+
+/* Dark overlay to make text readable */
+.hero-section::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(180deg, rgba(21, 21, 30, 0.88) 0%, rgba(21, 21, 30, 0.75) 50%, rgba(21, 21, 30, 0.88) 100%);
+    z-index: -1;
+    pointer-events: none;
+}
+
+/* Animated Racing Lines Background (alternative) */
+.hero-racing-lines {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1;
+    opacity: 0.15;
+    display: none;
+}
+
+.racing-line {
+    position: absolute;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--f1-red), transparent);
+    animation: raceLine 3s linear infinite;
+}
+
+.racing-line:nth-child(1) {
+    top: 15%;
+    left: -100%;
+    width: 30%;
+    animation-delay: 0s;
+    animation-duration: 2.5s;
+}
+
+.racing-line:nth-child(2) {
+    top: 35%;
+    left: -100%;
+    width: 40%;
+    animation-delay: 0.5s;
+    animation-duration: 3s;
+}
+
+.racing-line:nth-child(3) {
+    top: 55%;
+    left: -100%;
+    width: 25%;
+    animation-delay: 1s;
+    animation-duration: 2.8s;
+}
+
+.racing-line:nth-child(4) {
+    top: 75%;
+    left: -100%;
+    width: 35%;
+    animation-delay: 1.5s;
+    animation-duration: 3.2s;
+}
+
+.racing-line:nth-child(5) {
+    top: 90%;
+    left: -100%;
+    width: 20%;
+    animation-delay: 2s;
+    animation-duration: 2.3s;
+}
+
+@keyframes raceLine {
+    0% {
+        left: -100%;
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        left: 100%;
+        opacity: 0;
+    }
 }
 
 .hero-section::before {
@@ -207,8 +378,45 @@ body::before {
 .hero-subtitle {
     font-size: 0.85rem;
     color: var(--f1-silver);
-    margin-bottom: 12px;
+    margin-bottom: 8px;
     opacity: 0.9;
+}
+
+/* Social Proof */
+.hero-social {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 6px;
+    font-size: 0.7rem;
+    color: var(--f1-light-gray);
+    margin-bottom: 15px;
+    flex-wrap: wrap;
+}
+
+.hero-social svg {
+    color: #E10600;
+}
+
+.hero-social strong {
+    color: var(--f1-red);
+    font-weight: 700;
+}
+
+.hero-social .separator {
+    color: rgba(255, 255, 255, 0.2);
+    margin: 0 4px;
+}
+
+.hero-social a {
+    color: var(--f1-white);
+    text-decoration: none;
+    font-weight: 600;
+    transition: color 0.3s ease;
+}
+
+.hero-social a:hover {
+    color: var(--f1-red);
 }
 
 /* Countdown Timer */
@@ -258,6 +466,59 @@ body::before {
     align-items: center;
     gap: 10px;
     margin-top: 15px;
+}
+
+/* CTA Buttons */
+.hero-cta {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 20px;
+    flex-wrap: wrap;
+}
+
+.cta-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px 18px;
+    border-radius: 25px;
+    font-family: 'Orbitron', sans-serif;
+    font-size: 0.7rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    transition: all 0.3s ease;
+    border: 2px solid transparent;
+}
+
+.cta-btn span {
+    font-size: 0.9rem;
+}
+
+.cta-primary {
+    background: linear-gradient(135deg, var(--f1-red) 0%, var(--f1-dark-red) 100%);
+    color: var(--f1-white);
+    box-shadow: 0 4px 15px rgba(225, 6, 0, 0.4);
+}
+
+.cta-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(225, 6, 0, 0.6);
+}
+
+.cta-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    color: var(--f1-white);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.cta-secondary:hover {
+    background: rgba(225, 6, 0, 0.3);
+    border-color: var(--f1-red);
+    transform: translateY(-2px);
 }
 
 /* Countdown Timer */

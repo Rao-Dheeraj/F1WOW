@@ -604,6 +604,7 @@ async function fetchInstagramFollowers() {
 
 function updateFollowerCount(count) {
     const followerElement = document.getElementById('followerCount');
+    const heroFollowerElement = document.getElementById('heroFollowerCount');
     if (!followerElement) return;
 
     // Animate the count
@@ -621,7 +622,11 @@ function updateFollowerCount(count) {
             current = targetCount;
             clearInterval(timer);
         }
-        followerElement.textContent = formatNumber(Math.floor(current));
+        const formatted = formatNumber(Math.floor(current));
+        followerElement.textContent = formatted;
+        if (heroFollowerElement) {
+            heroFollowerElement.textContent = formatted + '+';
+        }
     }, duration / steps);
 }
 
