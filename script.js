@@ -1,4 +1,4 @@
-// FormulaNews - F1Wow Website Script
+// FormulaNews - F1wow Website Script
 
 // F1 API Endpoints - Primary and backup
 const API_BASE = 'https://jolpica-f1.vercel.app/api/f1';
