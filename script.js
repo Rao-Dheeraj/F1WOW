@@ -26,27 +26,27 @@ const teamColors = {
     'Cadillac': 'team-haas'
 };
 
-// Team logo URLs (2026 teams)
+// Team logo URLs - using PNG sources
 const teamLogos = {
-    'Red Bull Racing': 'https://upload.wikimedia.org/wikipedia/commons/d/df/Red_Bull_Racing_logo.svg',
-    'Ferrari': 'https://upload.wikimedia.org/wikipedia/commons/b/b8/Scuderia_Ferrari_Logo.svg',
-    'Mercedes': 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Mercedes-AMG-Logo.svg',
-    'McLaren': 'https://upload.wikimedia.org/wikipedia/commons/1/1c/McLaren_Racing_logo.svg',
-    'Aston Martin': 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Aston_Martin_F1_logo.svg',
-    'Alpine': 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Alpine_F1_team_logo.svg',
-    'Williams': 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Williams_Racing_logo.svg',
-    'RB': 'https://upload.wikimedia.org/wikipedia/commons/6/66/Visa_Cash_App_RB_F1_team_logo.svg',
-    'Racing Bulls': 'https://upload.wikimedia.org/wikipedia/commons/6/66/Visa_Cash_App_RB_F1_team_logo.svg',
-    'AlphaTauri': 'https://upload.wikimedia.org/wikipedia/commons/6/66/Visa_Cash_App_RB_F1_team_logo.svg',
-    'Sauber': 'https://upload.wikimedia.org/wikipedia/commons/3/33/Stake_F1_Team_logo.svg',
-    'Audi': 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Audi_logo.svg',
-    'Haas F1 Team': 'https://upload.wikimedia.org/wikipedia/commons/1/16/Moneygram_Haas_F1_logo.svg',
-    'Haas': 'https://upload.wikimedia.org/wikipedia/commons/1/16/Moneygram_Haas_F1_logo.svg',
-    'Cadillac': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Cadillac_logo.svg/svg'
+    'Red Bull Racing': 'https://www.formula1.com/content/dam/fom-website/2018-red-bull-racing/RedBull_Racing_Logo_1000px.png.transform/6col/image.png',
+    'Ferrari': 'https://www.formula1.com/content/dam/fom-website/2018-scuderia-ferrari/Scuderia_Ferrari_Logo_1000px.png.transform/6col/image.png',
+    'Mercedes': 'https://www.formula1.com/content/dam/fom-website/2018-mercedes/Mercedes_Brand_Logo_1000px.png.transform/6col/image.png',
+    'McLaren': 'https://www.formula1.com/content/dam/fom-website/2018-mclaren/McLaren_Racing_Logo_1000px.png.transform/6col/image.png',
+    'Aston Martin': 'https://www.formula1.com/content/dam/fom-website/2023-aston-martin/Aston_Martin_Armadillo_Logo_1000px.png.transform/6col/image.png',
+    'Alpine': 'https://www.formula1.com/content/dam/fom-website/2021-alpine/Alpine_Alpine_Logo_1000px.png.transform/6col/image.png',
+    'Williams': 'https://www.formula1.com/content/dam/fom-website/2018-williams/Williams_Racing_Logo_1000px.png.transform/6col/image.png',
+    'RB': 'https://www.formula1.com/content/dam/fom-website/2023-VISA-Cash-App-RB-F1-Team/VISA_Cash_App_RB_F1_Team_Logo_1000px.png.transform/6col/image.png',
+    'Racing Bulls': 'https://www.formula1.com/content/dam/fom-website/2023-VISA-Cash-App-RB-F1-Team/VISA_Cash_App_RB_F1_Team_Logo_1000px.png.transform/6col/image.png',
+    'AlphaTauri': 'https://www.formula1.com/content/dam/fom-website/2023-VISA-Cash-App-RB-F1-Team/VISA_Cash_App_RB_F1_Team_Logo_1000px.png.transform/6col/image.png',
+    'Sauber': 'https://www.formula1.com/content/dam/fom-website/2023-stake/Stake_F1_Team_Logo_1000px.png.transform/6col/image.png',
+    'Audi': 'https://www.formula1.com/content/dam/fom-website/2026-audi/Audi_Sauber_Logo_1000px.png.transform/6col/image.png',
+    'Haas F1 Team': 'https://www.formula1.com/content/dam/fom-website/2024-moneygram-haas-f1-team/Moneygram_Haas_F1_Team_Logo_1000px.png.transform/6col/image.png',
+    'Haas': 'https://www.formula1.com/content/dam/fom-website/2024-moneygram-haas-f1-team/Moneygram_Haas_F1_Team_Logo_1000px.png.transform/6col/image.png',
+    'Cadillac': 'https://www.formula1.com/content/dam/fom-website/2026-general/Cadillac_F1_Logo_1000px.png.transform/6col/image.png'
 };
 
 // Fallback logo if not found
-const fallbackLogo = 'https://upload.wikimedia.org/wikipedia/commons/3/33/Stake_F1_Team_logo.svg';
+const fallbackLogo = 'https://www.formula1.com/content/dam/fom-website/2023-stake/Stake_F1_Team_Logo_1000px.png.transform/6col/image.png';
 
 // 2026 Race Calendar
 const RACE_SCHEDULE_2026 = [
