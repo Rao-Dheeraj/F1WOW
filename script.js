@@ -367,7 +367,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadRaceSchedule();
     fetchInstagramFollowers();
     startCountdown();
-    initPredictor();
     initSearch();
 });
 
@@ -487,105 +486,6 @@ function initSearch() {
         } else {
             searchResults.innerHTML = '';
         }
-    }
-}
-
-// Championship Predictor Modal
-function initPredictor() {
-    const modal = document.getElementById('predictorModal');
-    const heroBtn = document.getElementById('heroPredictorBtn');
-    const closeBtn = document.getElementById('predictorClose');
-    const buttons = document.querySelectorAll('.predictor-btn');
-    const resultsSection = document.getElementById('predictorResults');
-    const predictionBars = document.getElementById('predictionBars');
-
-    // Open modal
-    heroBtn.addEventListener('click', () => {
-        modal.style.display = 'flex';
-        document.body.style.overflow = 'hidden';
-    });
-
-    // Close modal
-    closeBtn.addEventListener('click', closeModal);
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) closeModal();
-    });
-
-    function closeModal() {
-        modal.style.display = 'none';
-        document.body.style.overflow = '';
-    }
-
-    // Close on Escape key
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.style.display === 'flex') {
-            closeModal();
-        }
-    });
-
-    // Load saved predictions from localStorage
-    const savedPredictions = JSON.parse(localStorage.getItem('f1Predictions') || '{}');
-
-    buttons.forEach(btn => {
-        const driver = btn.dataset.driver;
-
-        // Show previously voted state
-        if (savedPredictions[driver]) {
-            btn.classList.add('selected');
-        }
-
-        btn.addEventListener('click', () => {
-            // Toggle selection
-            btn.classList.toggle('selected');
-
-            // Update predictions
-            if (btn.classList.contains('selected')) {
-                savedPredictions[driver] = true;
-            } else {
-                delete savedPredictions[driver];
-            }
-
-            localStorage.setItem('f1Predictions', JSON.stringify(savedPredictions));
-            showPredictions(savedPredictions);
-        });
-    });
-
-    // Show results if there are any predictions
-    if (Object.keys(savedPredictions).length > 0) {
-        showPredictions(savedPredictions);
-    }
-
-    function showPredictions(predictions) {
-        const driverNames = {
-            'max': 'Max Verstappen',
-            'leclerc': 'Charles Leclerc',
-            'hamilton': 'Lewis Hamilton',
-            'russell': 'George Russell',
-            'norris': 'Lando Norris',
-            'antonelli': 'Kimi Antonelli'
-        };
-
-        resultsSection.style.display = 'block';
-        predictionBars.innerHTML = '';
-
-        const total = Object.keys(predictions).length;
-        if (total === 0) {
-            resultsSection.style.display = 'none';
-            return;
-        }
-
-        Object.keys(predictions).forEach(driver => {
-            const percentage = Math.round((1 / total) * 100);
-            const bar = document.createElement('div');
-            bar.className = 'prediction-bar';
-            bar.innerHTML = `
-                <div class="prediction-bar-label">${driverNames[driver]}</div>
-                <div class="prediction-bar-track">
-                    <div class="prediction-bar-fill" style="width: ${percentage}%">${percentage}%</div>
-                </div>
-            `;
-            predictionBars.appendChild(bar);
-        });
     }
 }
 
