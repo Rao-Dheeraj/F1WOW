@@ -660,45 +660,12 @@ const PREDICTION_RACES = RACE_SCHEDULE_2026.filter(race => !race.completed && !r
 
 // Initialize Predictor Game
 function initPredictorGame() {
-    initTabNavigation();
     populateDriverDropdowns();
     populateRaceSelector();
     loadUserData();
     initSubmitPrediction();
     loadLeaderboard();
     displayUserPredictions();
-}
-
-// Tab Navigation
-function initTabNavigation() {
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    const tabContents = document.querySelectorAll('.tab-content');
-
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', () => {
-            const tabName = btn.dataset.tab;
-
-            // Update active tab button
-            tabBtns.forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-
-            // Show corresponding content
-            tabContents.forEach(content => {
-                content.classList.remove('active');
-                if (content.id === `${tabName}-tab`) {
-                    content.classList.add('active');
-                }
-            });
-
-            // If championship tab, render graph
-            if (tabName === 'championship') {
-                renderGraph();
-            }
-
-            // Scroll to top smoothly
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        });
-    });
 }
 
 // Populate driver dropdowns
