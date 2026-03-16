@@ -71,7 +71,6 @@ body {
 .subtitle {
     font-size: 0.75rem;
     color: var(--f1-light-gray);
-    text-transform: uppercase;
     letter-spacing: 3px;
     margin-left: 10px;
 }
