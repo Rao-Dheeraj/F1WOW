@@ -294,6 +294,98 @@ body::before {
     margin-top: 30px;
 }
 
+/* Search Section */
+.search-section {
+    margin-bottom: 40px;
+    position: relative;
+    z-index: 1;
+}
+
+.search-container {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px 25px;
+    position: relative;
+}
+
+.search-icon {
+    color: var(--f1-light-gray);
+    display: flex;
+    align-items: center;
+}
+
+.search-input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    outline: none;
+    font-family: 'Roboto', sans-serif;
+    font-size: 1rem;
+    color: var(--f1-white);
+    padding: 10px 0;
+}
+
+.search-input::placeholder {
+    color: var(--f1-light-gray);
+}
+
+.search-clear {
+    background: rgba(255, 255, 255, 0.1);
+    border: none;
+    color: var(--f1-light-gray);
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    cursor: pointer;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.search-clear:hover {
+    background: var(--f1-red);
+    color: var(--f1-white);
+}
+
+.search-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 15px;
+    justify-content: center;
+}
+
+.search-tag {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: var(--f1-light-gray);
+    padding: 8px 18px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.search-tag:hover,
+.search-tag.active {
+    background: var(--f1-red);
+    color: var(--f1-white);
+    border-color: var(--f1-red);
+}
+
+.search-results {
+    margin-top: 20px;
+}
+
+.search-no-results {
+    text-align: center;
+    padding: 30px;
+    color: var(--f1-light-gray);
+    font-style: italic;
+}
+
 /* Championship Predictor Section */
 .predictor-section {
     position: relative;

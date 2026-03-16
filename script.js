@@ -368,7 +368,127 @@ document.addEventListener('DOMContentLoaded', () => {
     fetchInstagramFollowers();
     startCountdown();
     initPredictor();
+    initSearch();
 });
+
+// Search functionality
+function initSearch() {
+    const searchInput = document.getElementById('searchInput');
+    const searchClear = document.getElementById('searchClear');
+    const searchTags = document.querySelectorAll('.search-tag');
+    const searchResults = document.getElementById('searchResults');
+    const articlesGrid = document.getElementById('articlesGrid');
+
+    // Store article data for search
+    const articles = Array.from(articlesGrid.querySelectorAll('.article-preview-card')).map(card => ({
+        card,
+        title: card.querySelector('.article-preview-title')?.textContent.toLowerCase() || '',
+        excerpt: card.querySelector('.article-preview-excerpt')?.textContent.toLowerCase() || '',
+        category: card.querySelector('.preview-category')?.textContent.toLowerCase() || '',
+        driver: card.querySelector('.preview-driver')?.textContent.toLowerCase() || '',
+        event: card.querySelector('.preview-event')?.textContent.toLowerCase() || '',
+        tags: card.querySelector('.preview-driver')?.textContent.toLowerCase() || ''
+    }));
+
+    let currentFilter = 'all';
+
+    // Search input handler
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase().trim();
+        searchClear.style.display = query ? 'block' : 'none';
+
+        if (query === '') {
+            showAllArticles();
+            searchResults.innerHTML = '';
+            return;
+        }
+
+        filterArticles(query, currentFilter);
+    });
+
+    // Clear button handler
+    searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        searchClear.style.display = 'none';
+        showAllArticles();
+        searchResults.innerHTML = '';
+    });
+
+    // Tag filter handlers
+    searchTags.forEach(tag => {
+        tag.addEventListener('click', () => {
+            searchTags.forEach(t => t.classList.remove('active'));
+            tag.classList.add('active');
+            currentFilter = tag.dataset.filter;
+
+            const query = searchInput.value.toLowerCase().trim();
+            if (query === '') {
+                filterByTag(currentFilter);
+            } else {
+                filterArticles(query, currentFilter);
+            }
+        });
+    });
+
+    function showAllArticles() {
+        articles.forEach(article => {
+            article.card.style.display = 'flex';
+        });
+    }
+
+    function filterByTag(filter) {
+        if (filter === 'all') {
+            showAllArticles();
+        } else {
+            articles.forEach(article => {
+                const matches = article.category.includes(filter) ||
+                    article.driver.includes(filter) ||
+                    article.event.includes(filter) ||
+                    article.tags.includes(filter);
+                article.card.style.display = matches ? 'flex' : 'none';
+            });
+        }
+
+        // Update results count
+        const visibleCount = Array.from(articlesGrid.querySelectorAll('.article-preview-card'))
+            .filter(card => card.style.display !== 'none').length;
+        updateResultsCount(visibleCount, articles.length);
+    }
+
+    function filterArticles(query, filter) {
+        let matchCount = 0;
+
+        articles.forEach(article => {
+            const searchableText = `${article.title} ${article.excerpt} ${article.category} ${article.driver} ${article.event} ${article.tags}`;
+            const matchesQuery = searchableText.includes(query);
+            const matchesFilter = filter === 'all' ||
+                article.category.includes(filter) ||
+                article.driver.includes(filter) ||
+                article.event.includes(filter);
+
+            if (matchesQuery && matchesFilter) {
+                article.card.style.display = 'flex';
+                matchCount++;
+            } else {
+                article.card.style.display = 'none';
+            }
+        });
+
+        updateResultsCount(matchCount, articles.length);
+    }
+
+    function updateResultsCount(visible, total) {
+        if (searchInput.value.trim() !== '' || currentFilter !== 'all') {
+            searchResults.innerHTML = `
+                <p style="color: var(--f1-light-gray); font-size: 0.9rem; text-align: center;">
+                    Found ${visibleCount} of ${total} articles
+                </p>
+            `;
+        } else {
+            searchResults.innerHTML = '';
+        }
+    }
+}
 
 // Championship Predictor
 function initPredictor() {
