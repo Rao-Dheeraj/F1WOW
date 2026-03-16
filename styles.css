@@ -1868,12 +1868,14 @@ body::before {
     color: var(--f1-light-gray);
     text-transform: uppercase;
     letter-spacing: 2px;
+    text-align: center;
 }
 
 .share-buttons {
     display: flex;
     flex-wrap: wrap;
     gap: 12px;
+    justify-content: center;
 }
 
 .share-btn {
