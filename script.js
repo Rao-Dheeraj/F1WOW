@@ -26,26 +26,43 @@ const teamColors = {
     'Cadillac': 'team-haas'
 };
 
-// Team logo data URIS - base64 encoded SVG logos
+// Team logo CSS classes
 const teamLogos = {
-    'Red Bull Racing': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzM2NzFDNiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+UkI8L3RleHQ+PHRleHQgeD0iMTAiIHk9IjU1IiBmaWxsPSIjMzY3MUM2IiBmb250LXNpemU9IjE1IiBmb250LXdlaWdodD0iYm9sZCI+UmQgQnVsbDwvdGV4dD48L3N2Zz4=',
-    'Ferrari': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0Y5MTUzNiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+RkVSUkFSSTwvdGV4dD48L3N2Zz4=',
-    'Mercedes': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzI3RjREMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TUVSRURFUzwvdGV4dD48L3N2Zz4=',
-    'McLaren': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0ZGODcwMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TUNMQVJFTjwvdGV4dD48L3N2Zz4=',
-    'Aston Martin': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzIyOTk3MSIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+QVNUT048L3RleHQ+PC9zdmc+',
-    'Alpine': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0ZGODVCQyIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+QUxQSU5FPC90ZXh0Pjwvc3ZnPg==',
-    'Williams': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzY0QzRGRiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+V0lMTElQUU8L3RleHQ+PC9zdmc+',
-    'RB': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzVFODlBQSIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+UkI8L3RleHQ+PC9zdmc+',
-    'Racing Bulls': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzVFODlBQSIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+UkI8L3RleHQ+PC9zdmc+',
-    'Sauber': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzUyRTI4MCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+UFRJS08vdGV4dD48L3N2Zz4=',
-    'Audi': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzIyMjIyMiIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+QVVESTwvdGV4dD48L3N2Zz4=',
-    'Haas F1 Team': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0I2QkFCQkQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmb250LWZhbWlseT0iQXJpYWwiPkhBQVM8L3RleHQ+PC9zdmc+',
-    'Haas': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0I2QkFCQkQiIGZvbnQtd2VpZ2h0PSJib2xkIiBmb250LWZhbWlseT0iQXJpYWwiPkhBQVM8L3RleHQ+PC9zdmc+',
-    'Cadillac': 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iI0U2MDAxMCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+Q0FESUxBQzwvdGV4dD48L3N2Zz4='
+    'Red Bull Racing': 'logo-rbr',
+    'Ferrari': 'logo-fer',
+    'Mercedes': 'logo-mer',
+    'McLaren': 'logo-mcl',
+    'Aston Martin': 'logo-ast',
+    'Alpine': 'logo-alp',
+    'Williams': 'logo-wil',
+    'RB': 'logo-rbt',
+    'Racing Bulls': 'logo-rbt',
+    'AlphaTauri': 'logo-rbt',
+    'Sauber': 'logo-sau',
+    'Audi': 'logo-aud',
+    'Haas F1 Team': 'logo-haas',
+    'Haas': 'logo-haas',
+    'Cadillac': 'logo-cad'
 };
 
-// Fallback logo
-const fallbackLogo = 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAxMDAgNjAiPjx0ZXh0IHg9IjEwIiB5PSIzMCIgZmlsbD0iIzlGOTQ5OCIgZm9udC13ZWlnaHQ9ImJvbGQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+RjE8L3RleHQ+PC9zdmc+';
+// Team short names for display
+const teamShortNames = {
+    'Red Bull Racing': 'RBR',
+    'Ferrari': 'FER',
+    'Mercedes': 'MER',
+    'McLaren': 'MCL',
+    'Aston Martin': 'AST',
+    'Alpine': 'ALP',
+    'Williams': 'WIL',
+    'RB': 'RBT',
+    'Racing Bulls': 'RBT',
+    'AlphaTauri': 'RBT',
+    'Sauber': 'STK',
+    'Audi': 'AUD',
+    'Haas F1 Team': 'HAA',
+    'Haas': 'HAA',
+    'Cadillac': 'CAD'
+};
 
 // 2026 Race Calendar
 const RACE_SCHEDULE_2026 = [
@@ -155,14 +172,13 @@ function displayDriverStandings(standings) {
     const container = document.getElementById('driverStandings');
     const html = standings.map(driver => {
         const teamName = driver.Constructors?.[0]?.name || 'Unknown';
-        const logoUrl = teamLogos[teamName] || fallbackLogo;
+        const logoClass = teamLogos[teamName] || '';
+        const shortName = teamShortNames[teamName] || teamName.substring(0, 3).toUpperCase();
 
         return `
             <div class="standing-item">
                 <div class="standing-position">${driver.position}</div>
-                <div class="team-logo">
-                    <img src="${logoUrl}" alt="${teamName}" onerror="this.src='${fallbackLogo}'">
-                </div>
+                <div class="team-logo ${logoClass}">${shortName}</div>
                 <div class="standing-info">
                     <div>
                         <div class="standing-name">${driver.Driver.givenName} ${driver.Driver.familyName}</div>
@@ -200,14 +216,13 @@ async function fetchConstructorStandings() {
 function displayConstructorStandings(standings) {
     const container = document.getElementById('constructorStandings');
     const html = standings.map(team => {
-        const logoUrl = teamLogos[team.Constructor.name] || fallbackLogo;
+        const logoClass = teamLogos[team.Constructor.name] || '';
+        const shortName = teamShortNames[team.Constructor.name] || team.Constructor.name.substring(0, 3).toUpperCase();
 
         return `
             <div class="standing-item">
                 <div class="standing-position">${team.position}</div>
-                <div class="team-logo">
-                    <img src="${logoUrl}" alt="${team.Constructor.name}" onerror="this.src='${fallbackLogo}'">
-                </div>
+                <div class="team-logo ${logoClass}">${shortName}</div>
                 <div class="standing-info">
                     <div class="standing-name">${team.Constructor.name}</div>
                 </div>
@@ -265,15 +280,14 @@ function displayFallbackStandings(container, type) {
 
     const data = fallbackData[type];
     const html = data.map(item => {
-        const logoUrl = teamLogos[item.team] || teamLogos[item.name] || fallbackLogo;
+        const logoClass = teamLogos[item.team] || teamLogos[item.name] || '';
+        const shortName = teamShortNames[item.team] || teamShortNames[item.name] || item.name.substring(0, 3).toUpperCase();
         const displayTeam = type === 'driver' ? item.team : '';
 
         return `
             <div class="standing-item">
                 <div class="standing-position">${item.position}</div>
-                <div class="team-logo">
-                    <img src="${logoUrl}" alt="${item.team}" onerror="this.src='${fallbackLogo}'">
-                </div>
+                <div class="team-logo ${logoClass}">${shortName}</div>
                 <div class="standing-info">
                     <div>
                         <div class="standing-name">${item.name}</div>

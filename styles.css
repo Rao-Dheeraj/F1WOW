@@ -846,18 +846,42 @@ body::before {
 }
 
 .team-logo {
-    width: 50px;
-    height: 30px;
+    width: 55px;
+    height: 35px;
     display: flex;
     align-items: center;
     justify-content: center;
+    border-radius: 8px;
+    font-family: 'Orbitron', sans-serif;
+    font-weight: 700;
+    font-size: 0.65rem;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: #fff;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    position: relative;
+    overflow: hidden;
 }
 
-.team-logo img {
-    max-width: 45px;
-    max-height: 25px;
-    object-fit: contain;
+.team-logo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.2) 0%, transparent 50%);
 }
+
+.team-logo.logo-rbr { background: linear-gradient(135deg, #3671C6 0%, #1B4B8C 100%); }
+.team-logo.logo-fer { background: linear-gradient(135deg, #F91536 0%, #C91229 100%); }
+.team-logo.logo-mer { background: linear-gradient(135deg, #27F4D2 0%, #00A89C 100%); color: #000; text-shadow: none; }
+.team-logo.logo-mcl { background: linear-gradient(135deg, #FF8700 0%, #CC6D00 100%); }
+.team-logo.logo-ast { background: linear-gradient(135deg, #229971 0%, #1A7A5A 100%); }
+.team-logo.logo-alp { background: linear-gradient(135deg, #FF87BC 0%, #CC6A97 100%); }
+.team-logo.logo-wil { background: linear-gradient(135deg, #64C4FF 0%, #509ECC 100%); color: #000; text-shadow: none; }
+.team-logo.logo-rbt { background: linear-gradient(135deg, #5E8FAA 0%, #4A7388 100%); }
+.team-logo.logo-sau { background: linear-gradient(135deg, #52E252 0%, #3CB343 100%); }
+.team-logo.logo-aud { background: linear-gradient(135deg, #1E1E1E 0%, #000000 100%); border: 1px solid #444; }
+.team-logo.logo-haas { background: linear-gradient(135deg, #B6BABD 0%, #929597 100%); color: #000; text-shadow: none; }
+.team-logo.logo-cad { background: linear-gradient(135deg, #E6000F 0%, #B8000C 100%); }
 
 .standing-item:last-child {
     border-bottom: none;
