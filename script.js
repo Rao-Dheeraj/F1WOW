@@ -26,42 +26,27 @@ const teamColors = {
     'Cadillac': 'team-haas'
 };
 
-// Team logo mapping (2026 teams)
+// Team logo URLs (2026 teams)
 const teamLogos = {
-    'Red Bull Racing': 'logo-rbr',
-    'Ferrari': 'logo-fer',
-    'Mercedes': 'logo-mer',
-    'McLaren': 'logo-mcl',
-    'Aston Martin': 'logo-ast',
-    'Alpine': 'logo-alp',
-    'Williams': 'logo-wil',
-    'RB': 'logo-rbt',
-    'Racing Bulls': 'logo-rbt',
-    'AlphaTauri': 'logo-rbt',
-    'Sauber': 'logo-alf',
-    'Audi': 'logo-aud',
-    'Haas F1 Team': 'logo-haas',
-    'Haas': 'logo-haas',
-    'Cadillac': 'logo-cad'
+    'Red Bull Racing': 'https://upload.wikimedia.org/wikipedia/commons/d/df/Red_Bull_Racing_logo.svg',
+    'Ferrari': 'https://upload.wikimedia.org/wikipedia/commons/b/b8/Scuderia_Ferrari_Logo.svg',
+    'Mercedes': 'https://upload.wikimedia.org/wikipedia/commons/f/f3/Mercedes-AMG-Logo.svg',
+    'McLaren': 'https://upload.wikimedia.org/wikipedia/commons/1/1c/McLaren_Racing_logo.svg',
+    'Aston Martin': 'https://upload.wikimedia.org/wikipedia/commons/f/f9/Aston_Martin_F1_logo.svg',
+    'Alpine': 'https://upload.wikimedia.org/wikipedia/commons/9/9d/Alpine_F1_team_logo.svg',
+    'Williams': 'https://upload.wikimedia.org/wikipedia/commons/e/e6/Williams_Racing_logo.svg',
+    'RB': 'https://upload.wikimedia.org/wikipedia/commons/6/66/Visa_Cash_App_RB_F1_team_logo.svg',
+    'Racing Bulls': 'https://upload.wikimedia.org/wikipedia/commons/6/66/Visa_Cash_App_RB_F1_team_logo.svg',
+    'AlphaTauri': 'https://upload.wikimedia.org/wikipedia/commons/6/66/Visa_Cash_App_RB_F1_team_logo.svg',
+    'Sauber': 'https://upload.wikimedia.org/wikipedia/commons/3/33/Stake_F1_Team_logo.svg',
+    'Audi': 'https://upload.wikimedia.org/wikipedia/commons/e/e5/Audi_logo.svg',
+    'Haas F1 Team': 'https://upload.wikimedia.org/wikipedia/commons/1/16/Moneygram_Haas_F1_logo.svg',
+    'Haas': 'https://upload.wikimedia.org/wikipedia/commons/1/16/Moneygram_Haas_F1_logo.svg',
+    'Cadillac': 'https://upload.wikimedia.org/wikipedia/commons/thumb/1/17/Cadillac_logo.svg/svg'
 };
 
-// Team short names for logos
-const teamShortNames = {
-    'Red Bull Racing': 'RBR',
-    'Ferrari': 'FER',
-    'Mercedes': 'MER',
-    'McLaren': 'MCL',
-    'Aston Martin': 'AST',
-    'Alpine': 'ALP',
-    'Williams': 'WIL',
-    'RB': 'RBT',
-    'Racing Bulls': 'RBT',
-    'Sauber': 'SAU',
-    'Audi': 'AUD',
-    'Haas F1 Team': 'HAA',
-    'Haas': 'HAA',
-    'Cadillac': 'CAD'
-};
+// Fallback logo if not found
+const fallbackLogo = 'https://upload.wikimedia.org/wikipedia/commons/3/33/Stake_F1_Team_logo.svg';
 
 // 2026 Race Calendar
 const RACE_SCHEDULE_2026 = [
@@ -171,13 +156,15 @@ function displayDriverStandings(standings) {
     const container = document.getElementById('driverStandings');
     const html = standings.map(driver => {
         const teamName = driver.Constructors?.[0]?.name || 'Unknown';
-        const colorClass = teamColors[teamName] || '';
+        const logoUrl = teamLogos[teamName] || fallbackLogo;
 
         return `
             <div class="standing-item">
                 <div class="standing-position">${driver.position}</div>
+                <div class="team-logo">
+                    <img src="${logoUrl}" alt="${teamName}" onerror="this.src='${fallbackLogo}'">
+                </div>
                 <div class="standing-info">
-                    <div class="team-color ${colorClass}"></div>
                     <div>
                         <div class="standing-name">${driver.Driver.givenName} ${driver.Driver.familyName}</div>
                         <div style="font-size: 0.75rem; color: var(--f1-light-gray);">${teamName}</div>
@@ -214,13 +201,15 @@ async function fetchConstructorStandings() {
 function displayConstructorStandings(standings) {
     const container = document.getElementById('constructorStandings');
     const html = standings.map(team => {
-        const colorClass = teamColors[team.Constructor.name] || '';
+        const logoUrl = teamLogos[team.Constructor.name] || fallbackLogo;
 
         return `
             <div class="standing-item">
                 <div class="standing-position">${team.position}</div>
+                <div class="team-logo">
+                    <img src="${logoUrl}" alt="${team.Constructor.name}" onerror="this.src='${fallbackLogo}'">
+                </div>
                 <div class="standing-info">
-                    <div class="team-color ${colorClass}"></div>
                     <div class="standing-name">${team.Constructor.name}</div>
                 </div>
                 <div class="standing-points">${team.points} pts</div>
@@ -277,14 +266,15 @@ function displayFallbackStandings(container, type) {
 
     const data = fallbackData[type];
     const html = data.map(item => {
-        const logoClass = teamLogos[item.team] || teamLogos[item.name] || '';
-        const shortName = teamShortNames[item.team] || teamShortNames[item.name] || item.name.substring(0, 3).toUpperCase();
+        const logoUrl = teamLogos[item.team] || teamLogos[item.name] || fallbackLogo;
         const displayTeam = type === 'driver' ? item.team : '';
 
         return `
             <div class="standing-item">
                 <div class="standing-position">${item.position}</div>
-                ${logoClass ? `<div class="team-logo ${logoClass}">${shortName}</div>` : `<div class="team-logo">${shortName.substring(0,3)}</div>`}
+                <div class="team-logo">
+                    <img src="${logoUrl}" alt="${item.team}" onerror="this.src='${fallbackLogo}'">
+                </div>
                 <div class="standing-info">
                     <div>
                         <div class="standing-name">${item.name}</div>

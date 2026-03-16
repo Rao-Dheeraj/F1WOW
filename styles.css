@@ -846,31 +846,18 @@ body::before {
 }
 
 .team-logo {
-    width: 40px;
-    height: 40px;
-    border-radius: 50%;
+    width: 50px;
+    height: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-weight: 700;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    background: var(--f1-gray);
 }
 
-.team-logo.logo-rbr { background: linear-gradient(135deg, #3671C6 0%, #1B4B8C 100%); }
-.team-logo.logo-fer { background: linear-gradient(135deg, #F91536 0%, #C91229 100%); }
-.team-logo.logo-mer { background: linear-gradient(135deg, #27F4D2 0%, #1FA89C 100%); color: #000; }
-.team-logo.logo-mcl { background: linear-gradient(135deg, #FF8700 0%, #CC6D00 100%); }
-.team-logo.logo-ast { background: linear-gradient(135deg, #229971 0%, #1A7A5A 100%); }
-.team-logo.logo-alp { background: linear-gradient(135deg, #FF87BC 0%, #CC6A97 100%); }
-.team-logo.logo-wil { background: linear-gradient(135deg, #64C4FF 0%, #509ECC 100%); }
-.team-logo.logo-rbt { background: linear-gradient(135deg, #5E8FAA 0%, #4A7388 100%); }
-.team-logo.logo-alf { background: linear-gradient(135deg, #C92D4B 0%, #A1243C 100%); }
-.team-logo.logo-haas { background: linear-gradient(135deg, #B6BABD 0%, #929597 100%); }
-.team-logo.logo-aud { background: linear-gradient(135deg, #1E1E1E 0%, #000000 100%); }
-.team-logo.logo-cad { background: linear-gradient(135deg, #E6000F 0%, #B8000C 100%); }
-.team-logo.logo-ams { background: linear-gradient(135deg, #2B4562 0%, #1A2D40 100%); }
+.team-logo img {
+    max-width: 45px;
+    max-height: 25px;
+    object-fit: contain;
+}
 
 .standing-item:last-child {
     border-bottom: none;
