@@ -408,18 +408,6 @@ function initScrollAnimations() {
     });
 }
 
-// Initialize the page
-document.addEventListener('DOMContentLoaded', () => {
-    fetchDriverStandings();
-    fetchConstructorStandings();
-    loadRaceSchedule();
-    fetchInstagramFollowers();
-    startCountdown();
-    initSearch();
-    initBackToTop();
-    initScrollAnimations();
-});
-
 // Search functionality
 function initSearch() {
     const searchInput = document.getElementById('searchInput');
@@ -701,6 +689,11 @@ function initTabNavigation() {
                     content.classList.add('active');
                 }
             });
+
+            // If championship tab, render graph
+            if (tabName === 'championship') {
+                renderGraph();
+            }
 
             // Scroll to top smoothly
             window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -991,6 +984,48 @@ function loadLeaderboard() {
     }).join('');
 }
 
+// ============================================
+// CHAMPIONSHIP GRAPH
+// ============================================
+
+// Championship points data after each race (2026 Season)
+const CHAMPIONSHIP_DATA_2026 = {
+    driver: {
+        rounds: ['Australia', 'China'],
+        georgeRussell: { name: 'George Russell', team: 'Mercedes', color: '#27F4D2', points: [25, 51] },
+        kimiAntonelli: { name: 'Kimi Antonelli', team: 'Mercedes', color: '#27F4D2', points: [18, 47] },
+        charlesLeclerc: { name: 'Charles Leclerc', team: 'Ferrari', color: '#F91536', points: [15, 34] },
+        lewisHamilton: { name: 'Lewis Hamilton', team: 'Ferrari', color: '#F91536', points: [12, 33] },
+        oliverBearman: { name: 'Oliver Bearman', team: 'Haas', color: '#B6BABD', points: [10, 17] },
+        landoNorris: { name: 'Lando Norris', team: 'McLaren', color: '#FF8700', points: [10, 15] },
+        pierreGasly: { name: 'Pierre Gasly', team: 'Alpine', color: '#FF87BC', points: [8, 9] },
+        maxVerstappen: { name: 'Max Verstappen', team: 'Red Bull', color: '#3671C6', points: [6, 8] },
+        liamLawson: { name: 'Liam Lawson', team: 'RB', color: '#5E8FAA', points: [5, 8] },
+        oscarPiastri: { name: 'Oscar Piastri', team: 'McLaren', color: '#FF8700', points: [8, 3] },
+        carlosSainz: { name: 'Carlos Sainz', team: 'Williams', color: '#64C4FF', points: [4, 2] },
+        nicoHulkenberg: { name: 'Nico Hulkenberg', team: 'Audi', color: '#C92D4B', points: [2, 2] },
+        estebanOcon: { name: 'Esteban Ocon', team: 'Haas', color: '#B6BABD', points: [2, 0] }
+    },
+    constructor: {
+        rounds: ['Australia', 'China'],
+        mercedes: { name: 'Mercedes', color: '#27F4D2', points: [43, 98] },
+        ferrari: { name: 'Ferrari', color: '#F91536', points: [27, 67] },
+        haas: { name: 'Haas F1 Team', color: '#B6BABD', points: [12, 17] },
+        mclaren: { name: 'McLaren', color: '#FF8700', points: [18, 18] },
+        alpine: { name: 'Alpine', color: '#FF87BC', points: [8, 10] },
+        redBull: { name: 'Red Bull Racing', color: '#3671C6', points: [6, 12] },
+        rb: { name: 'Racing Bulls', color: '#5E8FAA', points: [5, 12] },
+        audi: { name: 'Audi', color: '#C92D4B', points: [2, 2] },
+        williams: { name: 'Williams', color: '#64C4FF', points: [4, 2] }
+    }
+};
+
+let currentGraphType = 'driver';
+let selectedDrivers = ['georgeRussell', 'kimiAntonelli', 'charlesLeclerc', 'lewisHamilton'];
+let selectedConstructors = ['mercedes', 'ferrari', 'mclaren', 'redBull'];
+
+console.log('CHAMPIONSHIP_DATA_2026 loaded:', CHAMPIONSHIP_DATA_2026);
+
 // Initialize everything
 document.addEventListener('DOMContentLoaded', () => {
     fetchDriverStandings();
@@ -1001,8 +1036,266 @@ document.addEventListener('DOMContentLoaded', () => {
     initSearch();
     initBackToTop();
     initScrollAnimations();
-    initPredictorGame(); // Add predictor game initialization
+    initPredictorGame();
+    initChampionshipGraph();
 });
+
+function initChampionshipGraph() {
+    console.log('initChampionshipGraph called');
+    const typeBtns = document.querySelectorAll('.graph-type-btn');
+    const championshipSelect = document.getElementById('championshipType');
+    console.log('typeBtns:', typeBtns.length, 'championshipSelect:', !!championshipSelect);
+
+    if (typeBtns.length > 0) {
+        typeBtns.forEach(btn => {
+            btn.addEventListener('click', () => {
+                typeBtns.forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+                currentGraphType = btn.dataset.type;
+
+                // Update select dropdown to match
+                if (championshipSelect) {
+                    championshipSelect.value = currentGraphType;
+                }
+
+                renderGraph();
+            });
+        });
+    }
+
+    if (championshipSelect) {
+        championshipSelect.addEventListener('change', (e) => {
+            currentGraphType = e.target.value;
+
+            // Update toggle buttons to match
+            typeBtns.forEach(btn => {
+                btn.classList.toggle('active', btn.dataset.type === currentGraphType);
+            });
+
+            renderGraph();
+        });
+    }
+
+    // Initial render if on championship page or when tab is opened
+    if (document.getElementById('championshipSvg') || document.getElementById('championship-tab')) {
+        renderGraph();
+    }
+}
+
+function renderGraph() {
+    console.log('renderGraph called, CHAMPIONSHIP_DATA_2026:', !!CHAMPIONSHIP_DATA_2026, 'currentGraphType:', currentGraphType);
+    const svg = document.getElementById('championshipSvg');
+    const legend = document.getElementById('graphLegend');
+    console.log('svg:', !!svg, 'legend:', !!legend);
+    if (!svg) return;
+
+    const data = CHAMPIONSHIP_DATA_2026[currentGraphType];
+    console.log('data:', data);
+    const rounds = data.rounds;
+    const selected = currentGraphType === 'driver' ? selectedDrivers : selectedConstructors;
+
+    // Clear previous
+    svg.innerHTML = '';
+    legend.innerHTML = '';
+
+    // Test: Add a visible circle to verify SVG is working
+    const testCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+    testCircle.setAttribute('cx', '400');
+    testCircle.setAttribute('cy', '200');
+    testCircle.setAttribute('r', '50');
+    testCircle.setAttribute('fill', 'red');
+    testCircle.setAttribute('class', 'test-circle');
+    svg.appendChild(testCircle);
+    console.log('Test circle added');
+
+    // Graph dimensions
+    const width = 800;
+    const height = 400;
+    const padding = { top: 30, right: 30, bottom: 50, left: 60 };
+    const graphWidth = width - padding.left - padding.right;
+    const graphHeight = height - padding.top - padding.bottom;
+
+    // Find max points for scaling
+    let maxPoints = 0;
+    Object.keys(data).forEach(key => {
+        if (key !== 'rounds') {
+            data[key].points.forEach(p => {
+                maxPoints = Math.max(maxPoints, p);
+            });
+        }
+    });
+    maxPoints = Math.ceil(maxPoints / 10) * 10; // Round to nearest 10
+    if (maxPoints < 50) maxPoints = 50; // Minimum scale
+
+    // Draw grid lines
+    const gridLines = 5;
+    for (let i = 0; i <= gridLines; i++) {
+        const y = padding.top + (graphHeight / gridLines) * i;
+        const value = maxPoints - (maxPoints / gridLines) * i;
+
+        // Grid line
+        const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+        line.setAttribute('x1', padding.left);
+        line.setAttribute('y1', y);
+        line.setAttribute('x2', width - padding.right);
+        line.setAttribute('y2', y);
+        line.setAttribute('class', 'graph-grid-line');
+        svg.appendChild(line);
+
+        // Y-axis labels
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', padding.left - 10);
+        text.setAttribute('y', y + 4);
+        text.setAttribute('text-anchor', 'end');
+        text.setAttribute('class', 'graph-axis-text');
+        text.textContent = Math.round(value);
+        svg.appendChild(text);
+    }
+
+    // Draw X-axis labels (race names)
+    rounds.forEach((round, index) => {
+        const x = padding.left + (graphWidth / (rounds.length - 1)) * index;
+
+        const text = document.createElementNS('http://www.w3.org/2000/svg', 'text');
+        text.setAttribute('x', x);
+        text.setAttribute('y', height - padding.bottom + 20);
+        text.setAttribute('text-anchor', 'middle');
+        text.setAttribute('class', 'graph-axis-text');
+        text.textContent = round;
+        svg.appendChild(text);
+    });
+
+    // Draw lines and points for selected drivers/teams
+    selected.forEach((key, index) => {
+        if (!data[key]) return;
+
+        const item = data[key];
+        const points = item.points;
+        const color = item.color;
+
+        // Create path data
+        let pathD = '';
+        points.forEach((point, i) => {
+            const x = padding.left + (graphWidth / (rounds.length - 1)) * i;
+            const y = padding.top + graphHeight - (point / maxPoints) * graphHeight;
+
+            if (i === 0) {
+                pathD += `M ${x} ${y}`;
+            } else {
+                pathD += ` L ${x} ${y}`;
+            }
+        });
+
+        // Draw line
+        const path = document.createElementNS('http://www.w3.org/2000/svg', 'path');
+        path.setAttribute('d', pathD);
+        path.setAttribute('class', 'graph-line animate');
+        path.setAttribute('style', `stroke: ${color}`);
+        path.setAttribute('data-name', item.name);
+        svg.appendChild(path);
+
+        // Draw points
+        points.forEach((point, i) => {
+            const x = padding.left + (graphWidth / (rounds.length - 1)) * i;
+            const y = padding.top + graphHeight - (point / maxPoints) * graphHeight;
+
+            const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
+            circle.setAttribute('cx', x);
+            circle.setAttribute('cy', y);
+            circle.setAttribute('r', 5);
+            circle.setAttribute('class', 'graph-point');
+            circle.setAttribute('style', `stroke: ${color}`);
+            circle.setAttribute('data-race', rounds[i]);
+            circle.setAttribute('data-points', point);
+            circle.setAttribute('data-name', item.name);
+            circle.setAttribute('data-team', item.team || item.name);
+
+            // Add hover event
+            circle.addEventListener('mouseenter', (e) => showGraphTooltip(e));
+            circle.addEventListener('mouseleave', hideGraphTooltip);
+
+            svg.appendChild(circle);
+        });
+
+        // Add legend item
+        const legendItem = document.createElement('div');
+        legendItem.className = 'graph-legend-item';
+        legendItem.innerHTML = `
+            <div class="graph-legend-color" style="background: ${color}"></div>
+            <span class="graph-legend-name">${item.name}</span>
+        `;
+        legendItem.addEventListener('click', () => toggleLine(key, item.name));
+        legend.appendChild(legendItem);
+    });
+}
+
+function showGraphTooltip(event) {
+    const tooltip = document.getElementById('graphTooltip');
+    if (!tooltip) return;
+
+    const target = event.target;
+    const race = target.getAttribute('data-race');
+    const points = target.getAttribute('data-points');
+    const name = target.getAttribute('data-name');
+    const team = target.getAttribute('data-team');
+
+    tooltip.innerHTML = `
+        <div class="graph-tooltip-race">${race} GP</div>
+        <div class="graph-tooltip-entries">
+            <div class="graph-tooltip-entry">
+                <span class="graph-tooltip-name">${name}</span>
+                <span class="graph-tooltip-points">${points} pts</span>
+            </div>
+        </div>
+    `;
+
+    // Position tooltip
+    const rect = target.getBoundingClientRect();
+    const container = document.getElementById('graphContainer');
+    const containerRect = container.getBoundingClientRect();
+
+    tooltip.style.left = (rect.left - containerRect.left + rect.width / 2 - 75) + 'px';
+    tooltip.style.top = (rect.top - containerRect.top - 60) + 'px';
+    tooltip.classList.add('visible');
+}
+
+function hideGraphTooltip() {
+    const tooltip = document.getElementById('graphTooltip');
+    if (tooltip) {
+        tooltip.classList.remove('visible');
+    }
+}
+
+function toggleLine(key, name) {
+    const svg = document.getElementById('championshipSvg');
+    const lines = svg.querySelectorAll('.graph-line');
+    const points = svg.querySelectorAll('.graph-point');
+
+    // Check if this line is currently visible
+    const line = Array.from(lines).find(l => l.getAttribute('data-name') === name);
+    const isHidden = line && line.style.display === 'none';
+
+    // Toggle visibility
+    if (line) {
+        line.style.display = isHidden ? '' : 'none';
+    }
+
+    // Toggle points
+    points.forEach(point => {
+        if (point.getAttribute('data-name') === name) {
+            point.style.display = isHidden ? '' : 'none';
+        }
+    });
+
+    // Toggle legend item opacity
+    const legendItems = document.querySelectorAll('.graph-legend-item');
+    legendItems.forEach(item => {
+        const itemName = item.querySelector('.graph-legend-name').textContent;
+        if (itemName === name) {
+            item.classList.toggle('hidden');
+        }
+    });
+}
 
 // ============================================
 // ARTICLE SHARE FUNCTION
