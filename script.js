@@ -1003,3 +1003,66 @@ document.addEventListener('DOMContentLoaded', () => {
     initScrollAnimations();
     initPredictorGame(); // Add predictor game initialization
 });
+
+// ============================================
+// ARTICLE SHARE FUNCTION
+// ============================================
+
+// Copy article link to clipboard
+function copyArticleLink() {
+    const url = window.location.href;
+
+    // Try modern clipboard API first
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(url).then(() => {
+            showCopySuccess();
+        }).catch(() => {
+            // Fallback to old method
+            fallbackCopyTextToClipboard(url);
+        });
+    } else {
+        fallbackCopyTextToClipboard(url);
+    }
+}
+
+// Fallback copy method for older browsers
+function fallbackCopyTextToClipboard(text) {
+    const textArea = document.createElement('textarea');
+    textArea.value = text;
+    textArea.style.position = 'fixed';
+    textArea.style.left = '-9999px';
+    document.body.appendChild(textArea);
+    textArea.focus();
+    textArea.select();
+
+    try {
+        const successful = document.execCommand('copy');
+        if (successful) {
+            showCopySuccess();
+        }
+    } catch (err) {
+        console.error('Unable to copy', err);
+    }
+
+    document.body.removeChild(textArea);
+}
+
+// Show copy success feedback
+function showCopySuccess() {
+    const copyBtn = document.querySelector('.share-btn.copy-link');
+    if (!copyBtn) return;
+
+    const originalHTML = copyBtn.innerHTML;
+    copyBtn.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        Copied!
+    `;
+    copyBtn.classList.add('copied');
+
+    setTimeout(() => {
+        copyBtn.innerHTML = originalHTML;
+        copyBtn.classList.remove('copied');
+    }, 2000);
+}

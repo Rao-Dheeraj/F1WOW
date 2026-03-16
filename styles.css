@@ -1851,6 +1851,110 @@ body::before {
 }
 
 /* ============================================
+   ARTICLE SHARE BUTTONS
+   ============================================ */
+
+.article-share {
+    margin-top: 40px;
+    padding-top: 30px;
+    border-top: 1px solid var(--f1-gray);
+}
+
+.article-share h3 {
+    font-family: 'Orbitron', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    margin-bottom: 20px;
+    color: var(--f1-light-gray);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+}
+
+.share-buttons {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.share-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+}
+
+.share-btn.copy-link {
+    background: var(--f1-dark);
+    color: var(--f1-white);
+    border: 2px solid var(--f1-gray);
+}
+
+.share-btn.copy-link:hover {
+    border-color: var(--f1-red);
+    background: var(--f1-red);
+}
+
+.share-btn.copy-link.copied {
+    background: #27F4D2;
+    border-color: #27F4D2;
+    color: var(--f1-black);
+}
+
+.share-btn.whatsapp {
+    background: #25D366;
+    color: var(--f1-white);
+}
+
+.share-btn.whatsapp:hover {
+    background: #20bd5a;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+}
+
+.share-btn.facebook {
+    background: #1877F2;
+    color: var(--f1-white);
+}
+
+.share-btn.facebook:hover {
+    background: #0d65d9;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4);
+}
+
+.share-btn.instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    color: var(--f1-white);
+}
+
+.share-btn.instagram:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(225, 48, 108, 0.4);
+}
+
+.share-btn svg {
+    flex-shrink: 0;
+}
+
+@media (max-width: 600px) {
+    .share-buttons {
+        flex-direction: column;
+    }
+
+    .share-btn {
+        width: 100%;
+        justify-content: center;
+    }
+}
+
+/* ============================================
    PREDICTOR GAME STYLES
    ============================================ */
 
