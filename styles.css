@@ -8,6 +8,20 @@
     --f1-light-gray: #949498;
     --f1-white: #FFFFFF;
     --f1-silver: #E8E8E8;
+
+    /* F1 Flag Colors */
+    --f1-yellow: #FFD700;  /* Caution/Yellow flag */
+    --f1-green: #00FF00;   /* Start/Go lights */
+    --f1-blue: #00AEEF;    /* Blue flag */
+
+    /* Checkered Flag Pattern */
+    --f1-checkered: repeating-conic-gradient(
+        #000 0% 25%,
+        #FFF 0% 50%
+    );
+    --f1-checkered-size: 20px 20px;
+
+    /* Team Colors */
     --team-redbull: #3671C6;
     --team-ferrari: #F91536;
     --team-mercedes: #27F4D2;
@@ -471,17 +485,38 @@ body::before {
 }
 
 .hero-badge {
-    display: inline-block;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
     background: linear-gradient(90deg, var(--f1-red) 0%, var(--f1-dark-red) 100%);
     color: var(--f1-white);
-    padding: 3px 10px;
+    padding: 6px 14px 6px 10px;
     border-radius: 12px;
-    font-size: 0.5rem;
+    font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 1px;
-    margin-bottom: 8px;
-    animation: pulse 2s infinite;
+    letter-spacing: 2px;
+    margin-bottom: 12px;
+    position: relative;
+    overflow: hidden;
+}
+
+/* Checkered Flag Decoration */
+.hero-badge::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 20px;
+    background: var(--f1-checkered);
+    background-size: var(--f1-checkered-size);
+    border-radius: 12px 0 0 12px;
+    opacity: 0.8;
+}
+
+.hero-badge span {
+    margin-left: 4px;
 }
 
 .hero-title {
@@ -1419,11 +1454,41 @@ body::before {
     font-weight: 600;
     text-transform: uppercase;
     letter-spacing: 1px;
+    font-size: 0.7rem;
+    position: relative;
+    overflow: hidden;
 }
 
+/* Breaking News - Yellow with Flash */
 .preview-category.breaking {
-    background: var(--f1-red);
-    animation: pulse 2s infinite;
+    background: var(--f1-yellow);
+    color: #000;
+    animation: breakingFlash 1.5s ease-in-out infinite;
+    font-weight: 700;
+}
+
+@keyframes breakingFlash {
+    0%, 100% {
+        background: var(--f1-yellow);
+        box-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        background: #FFA500;
+        box-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    }
+}
+
+/* Race Report - Green (Start/Go) */
+.preview-category:where([data-category="race"], .race-report) {
+    background: var(--f1-green);
+    color: #000;
+    font-weight: 700;
+}
+
+/* Technical - Blue */
+.preview-category:where([data-category="technical"], .technical) {
+    background: var(--f1-blue);
+    color: #FFF;
 }
 
 .preview-date {
@@ -1501,15 +1566,42 @@ body::before {
 }
 
 .live-badge {
-    background: var(--f1-red);
-    color: var(--f1-white);
+    background: var(--f1-green);
+    color: #000;
     padding: 4px 12px;
     border-radius: 20px;
     font-size: 0.7rem;
     font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 2px;
-    animation: pulse 2s infinite;
+    animation: livePulse 2s infinite;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+}
+
+/* Live indicator dot */
+.live-badge::before {
+    content: '';
+    width: 8px;
+    height: 8px;
+    background: #000;
+    border-radius: 50%;
+    animation: liveDot 1s ease-in-out infinite;
+}
+
+@keyframes livePulse {
+    0%, 100% {
+        box-shadow: 0 0 10px rgba(0, 255, 0, 0.5);
+    }
+    50% {
+        box-shadow: 0 0 25px rgba(0, 255, 0, 0.8);
+    }
+}
+
+@keyframes liveDot {
+    0%, 100% { transform: scale(1); }
+    50% { transform: scale(0.7); }
 }
 
 @keyframes pulse {
