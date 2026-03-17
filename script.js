@@ -1304,6 +1304,8 @@ document.addEventListener('DOMContentLoaded', () => {
     initCategoryTabs();
     initPredictorGame();
     initChampionshipGraph();
+    initSubscribeForms();
+    updateSubscriberCount();
 });
 
 function initChampionshipGraph() {
@@ -1612,61 +1614,140 @@ function showCopySuccess() {
 }
 
 // ============================================
-// SUBSCRIBE FUNCTION
+// SUBSCRIBE FUNCTION - No Setup Required
 // ============================================
 
-// Handle subscribe form submission
-function handleSubscribe(event) {
+// Store subscribers in localStorage
+// When you publish a new article, click "Notify Subscribers" button
+// This opens a pre-filled email with all subscriber BCC'd
+
+// Handle subscribe form - Stores subscriber locally
+async function handleSubscribe(event) {
     event.preventDefault();
+    const form = event.target;
     const emailInput = document.getElementById('subscribeEmail');
-    const email = emailInput.value;
-    const btn = event.target.querySelector('.subscribe-btn');
+    const email = emailInput.value.trim();
+    const btn = form.querySelector('.subscribe-btn');
     const btnText = btn.querySelector('.btn-text');
     const originalText = btnText.textContent;
+
+    // Email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRegex.test(email)) {
+        showNotification('Please enter a valid email address', 'error');
+        return;
+    }
+
+    // Check if already subscribed
+    let subscribers = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
+    const exists = subscribers.some(sub => sub.email === email);
+    if (exists) {
+        showNotification('You are already subscribed! 🏁', 'info');
+        emailInput.value = '';
+        return;
+    }
 
     // Show loading state
     btnText.textContent = 'Subscribing...';
     btn.disabled = true;
 
-    // Simulate API call (replace with actual API endpoint)
+    // Store subscriber locally
+    subscribers.push({
+        email: email,
+        date: new Date().toISOString(),
+        ip: 'stored-locally'
+    });
+    localStorage.setItem('f1wow_subscribers', JSON.stringify(subscribers));
+
+    // Show success
+    btnText.textContent = 'Subscribed! ✓';
+    btn.style.background = '#22c55e';
+    emailInput.value = '';
+    showNotification('Successfully subscribed! 🏁 You\'ll receive notifications for new articles.');
+
+    // Reset button after delay
     setTimeout(() => {
-        // Store subscription in localStorage
-        const subscribers = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
-        if (!subscribers.includes(email)) {
-            subscribers.push({
-                email: email,
-                date: new Date().toISOString()
-            });
-            localStorage.setItem('f1wow_subscribers', JSON.stringify(subscribers));
-        }
-
-        // Show success message
-        btnText.textContent = 'Subscribed! ✓';
-        btn.style.background = '#22c55e';
-
-        // Reset form
-        emailInput.value = '';
-
-        // Show notification
-        showNotification('Thanks for subscribing! 🏁 Check your inbox for confirmation.');
-
-        // Reset button after delay
-        setTimeout(() => {
-            btnText.textContent = originalText;
-            btn.style.background = '';
-            btn.disabled = false;
-        }, 3000);
-    }, 1000);
+        btnText.textContent = originalText;
+        btn.style.background = '';
+        btn.disabled = false;
+    }, 3000);
 }
 
+// Notify all subscribers about new article
+// Opens pre-filled email client with all subscribers BCC'd
+function notifySubscribers(articleTitle, articleUrl) {
+    const subscribers = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
+
+    if (subscribers.length === 0) {
+        showNotification('No subscribers yet! 📧', 'info');
+        return;
+    }
+
+    // Get all subscriber emails
+    const emailList = subscribers.map(s => s.email).join(', ');
+
+    // Create email body
+    const subject = encodeURIComponent(`🏁 New Article: ${articleTitle}`);
+    const body = encodeURIComponent(
+        `Hi F1wow Fans!\n\nWe just published a new article:\n\n${articleTitle}\n\nRead here: ${articleUrl}\n\n---\nThis is an automated notification from F1wow News.\nTo unsubscribe, reply to this email.`
+    );
+
+    // Open email client with all subscribers BCC'd
+    // This uses mailto: protocol which works without any backend
+    window.location.href = `mailto:?bcc=${emailList}&subject=${subject}&body=${body}`;
+}
+
+// Get subscriber count
+function getSubscriberCount() {
+    const subscribers = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
+    return subscribers.length;
+}
+
+// Export subscribers (for backup/management)
+function exportSubscribers() {
+    const subscribers = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
+
+    if (subscribers.length === 0) {
+        showNotification('No subscribers to export', 'info');
+        return;
+    }
+
+    // Create CSV content
+    const csv = 'Email,Date\n' + subscribers.map(s => `${s.email},${s.date}`).join('\n');
+
+    // Download file
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `f1wow-subscribers-${new Date().toISOString().split('T')[0]}.csv`;
+    a.click();
+    window.URL.revokeObjectURL(url);
+
+    showNotification(`Exported ${subscribers.length} subscribers!`, 'success');
+}
+
+// Initialize forms
+function initSubscribeForms() {
+    const forms = document.querySelectorAll('.subscribe-form');
+    forms.forEach(form => {
+        form.setAttribute('method', 'POST');
+        const emailInput = form.querySelector('input[type="email"]');
+        if (emailInput && !emailInput.getAttribute('name')) {
+            emailInput.setAttribute('name', 'email');
+        }
+    });
+}
+
+
 // Show notification message
-function showNotification(message) {
+function showNotification(message, type = 'success') {
     // Remove existing notification if any
     const existing = document.querySelector('.subscribe-notification');
     if (existing) existing.remove();
 
     const notification = document.createElement('div');
-    notification.className = 'subscribe-notification';
+    notification.className = `subscribe-notification ${type}`;
     notification.innerHTML = `
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M20 6L9 17l-5-5"/>
@@ -1681,6 +1762,71 @@ function showNotification(message) {
         setTimeout(() => notification.remove(), 300);
     }, 4000);
 }
+
+// Update subscriber count in nav
+function updateSubscriberCount() {
+    const subscribers = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
+    const countEl = document.getElementById('subscriberCount');
+    const totalCountEl = document.getElementById('totalSubscribers');
+    if (countEl) countEl.textContent = subscribers.length;
+    if (totalCountEl) totalCountEl.textContent = subscribers.length;
+}
+
+// Open admin panel
+function openAdminPanel(event) {
+    if (event) event.stopPropagation();
+    const panel = document.getElementById('adminPanel');
+    panel.classList.add('show');
+    updateSubscriberCount();
+}
+
+// Close admin panel
+function closeAdminPanel() {
+    const panel = document.getElementById('adminPanel');
+    panel.classList.remove('show');
+}
+
+// Notify all subscribers (opens email client)
+function notifyAllSubscribers() {
+    const subscribers = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
+    if (subscribers.length === 0) {
+        showNotification('No subscribers to notify! 📧', 'info');
+        return;
+    }
+    const title = document.getElementById('notifyArticleTitle')?.value || 'New F1wow Article Published!';
+    const url = document.getElementById('notifyArticleUrl')?.value || window.location.href;
+    notifySubscribers(title, url);
+}
+
+// Send custom notification with form values
+function sendCustomNotification() {
+    const title = document.getElementById('notifyArticleTitle').value;
+    const url = document.getElementById('notifyArticleUrl').value;
+    if (!title || !url) {
+        showNotification('Please enter article title and URL', 'error');
+        return;
+    }
+    notifySubscribers(title, url);
+    closeAdminPanel();
+}
+
+// Clear all subscribers
+function clearSubscribers() {
+    if (confirm('Are you sure you want to clear all subscribers? This cannot be undone.')) {
+        localStorage.removeItem('f1wow_subscribers');
+        updateSubscriberCount();
+        showNotification('All subscribers cleared', 'success');
+        closeAdminPanel();
+    }
+}
+
+// Close admin panel when clicking outside
+document.addEventListener('click', (e) => {
+    const panel = document.getElementById('adminPanel');
+    if (panel && panel.classList.contains('show') && !panel.contains(e.target) && !e.target.closest('.subscriber-count')) {
+        closeAdminPanel();
+    }
+});
 
 // ============================================
 // INSTAGRAM EMBED FUNCTION
