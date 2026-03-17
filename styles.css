@@ -2374,11 +2374,6 @@ body::before {
     font-size: 1rem;
     cursor: pointer;
     transition: all 0.3s ease;
-    appearance: none;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='%23E10600' stroke-width='2'%3E%3Cpath d='M6 9l6 6 6-6'/%3E%3C/svg%3E");
-    background-repeat: no-repeat;
-    background-position: right 15px center;
-    background-size: 20px;
 }
 
 .race-select:focus {
@@ -2387,9 +2382,52 @@ body::before {
     box-shadow: 0 0 0 3px rgba(225, 6, 0, 0.2);
 }
 
+/* Race Info Banner */
+.race-info-banner {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 20px;
+    margin-bottom: 30px;
+    background: linear-gradient(135deg, rgba(225, 6, 0, 0.15) 0%, rgba(21, 21, 30, 0.6) 100%);
+    border: 2px solid rgba(225, 6, 0, 0.3);
+    border-radius: 12px;
+}
+
+.race-flag {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.race-info-text {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+}
+
+.race-info-label {
+    font-size: 0.75rem;
+    color: var(--f1-light-gray);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.race-info-name {
+    font-size: 1.2rem;
+    font-weight: 700;
+    color: var(--f1-white);
+    font-family: 'Orbitron', sans-serif;
+}
+
 .race-select option {
     background: var(--f1-dark);
+    color: var(--f1-white);
     padding: 15px;
+}
+
+.podium-select option {
+    background: rgba(0, 0, 0, 0.9);
+    color: var(--f1-white);
 }
 
 /* Podium Predictor */
@@ -2397,11 +2435,12 @@ body::before {
     display: flex;
     justify-content: center;
     align-items: flex-end;
-    gap: 20px;
+    gap: 30px;
     margin: 40px 0;
     padding: 40px 20px;
     background: linear-gradient(180deg, rgba(225, 6, 0, 0.05) 0%, rgba(0, 0, 0, 0.2) 100%);
     border-radius: 15px;
+    flex-wrap: wrap;
 }
 
 .podium-position {
@@ -2417,27 +2456,27 @@ body::before {
     align-items: center;
     justify-content: flex-end;
     border-radius: 10px 10px 0 0;
-    padding: 20px;
+    padding: 25px 30px;
     transition: all 0.3s ease;
 }
 
 .podium-step.first {
-    width: 140px;
-    height: 180px;
+    width: 350px;
+    height: 200px;
     background: linear-gradient(180deg, #FFD700 0%, #FFA500 100%);
     order: 2;
 }
 
 .podium-step.second {
-    width: 120px;
-    height: 140px;
+    width: 300px;
+    height: 160px;
     background: linear-gradient(180deg, #C0C0C0 0%, #9A9A9A 100%);
     order: 1;
 }
 
 .podium-step.third {
-    width: 120px;
-    height: 110px;
+    width: 300px;
+    height: 130px;
     background: linear-gradient(180deg, #CD7F32 0%, #A06428 100%);
     order: 3;
 }
@@ -2456,13 +2495,14 @@ body::before {
 
 .podium-select {
     width: 100%;
-    padding: 10px;
-    background: rgba(0, 0, 0, 0.4);
-    border: 2px solid rgba(255, 255, 255, 0.2);
+    min-width: 200px;
+    padding: 10px 8px;
+    background: rgba(0, 0, 0, 0.6);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-radius: 8px;
     color: var(--f1-white);
     font-family: 'Roboto', sans-serif;
-    font-size: 0.85rem;
+    font-size: 1rem;
     cursor: pointer;
     text-align: center;
     margin-top: auto;
@@ -2559,6 +2599,13 @@ body::before {
 .prediction-race-name {
     font-weight: 600;
     color: var(--f1-white);
+    margin-bottom: 5px;
+}
+
+.prediction-username {
+    font-size: 0.85rem;
+    color: #27F4D2;
+    font-weight: 500;
     margin-bottom: 5px;
 }
 
@@ -2734,6 +2781,36 @@ body::before {
     color: var(--f1-light-gray);
 }
 
+/* Username Input Wrapper */
+.username-input-wrapper {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.username-status {
+    font-size: 1.2rem;
+    color: var(--f1-red);
+    transition: all 0.3s ease;
+}
+
+.username-status.available {
+    color: #2ecc71;
+}
+
+.username-hint {
+    display: block;
+    margin-top: 8px;
+    font-size: 0.8rem;
+    color: var(--f1-light-gray);
+}
+
+.username-input.taken {
+    border-color: #e74c3c !important;
+    box-shadow: 0 0 0 3px rgba(231, 76, 60, 0.2) !important;
+}
+
 /* Scoring Info */
 .scoring-info {
     background: rgba(39, 244, 210, 0.1);
@@ -2798,23 +2875,27 @@ body::before {
     }
 
     .podium-predictor {
-        gap: 10px;
+        gap: 15px;
         padding: 20px 10px;
     }
 
     .podium-step.first {
-        width: 90px;
-        height: 140px;
+        width: 200px;
+        height: 160px;
     }
 
     .podium-step.second {
-        width: 75px;
-        height: 110px;
+        width: 170px;
+        height: 130px;
     }
 
     .podium-step.third {
-        width: 75px;
-        height: 90px;
+        width: 170px;
+        height: 110px;
+    }
+
+    .podium-step {
+        padding: 15px 20px;
     }
 
     .podium-position-label {
@@ -2826,8 +2907,9 @@ body::before {
     }
 
     .podium-select {
-        font-size: 0.7rem;
-        padding: 8px 5px;
+        font-size: 0.85rem;
+        padding: 10px;
+        min-width: 150px;
     }
 
     .prediction-item {
@@ -3228,5 +3310,34 @@ body::before {
     .graph-tooltip {
         font-size: 0.75rem;
         min-width: 120px;
+    }
+}
+
+/* Instagram Embed Styles - for official Instagram embeds */
+.instagram-embed-container {
+    margin: 30px 0;
+    max-width: 658px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Style Instagram's official embed to match dark theme */
+.instagram-embed-container blockquote.instagram-media {
+    background: #1a1a2e !important;
+    border: 1px solid rgba(255, 255, 255, 0.1) !important;
+    border-radius: 12px !important;
+}
+
+/* Make Instagram embeds responsive */
+.instagram-embed-container blockquote.instagram-media {
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: auto !important;
+}
+
+/* Responsive Instagram Embed */
+@media (max-width: 768px) {
+    .instagram-embed-container {
+        margin: 20px 0;
     }
 }

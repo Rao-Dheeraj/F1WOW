@@ -177,6 +177,8 @@ async function fetchDriverStandings() {
 // Display driver standings
 function displayDriverStandings(standings) {
     const container = document.getElementById('driverStandings');
+    if (!container) return;
+
     const html = standings.map(driver => {
         const teamName = driver.Constructors?.[0]?.name || 'Unknown';
         const logoClass = teamLogos[teamName] || '';
@@ -222,6 +224,8 @@ async function fetchConstructorStandings() {
 // Display constructor standings
 function displayConstructorStandings(standings) {
     const container = document.getElementById('constructorStandings');
+    if (!container) return;
+
     const html = standings.map(team => {
         const logoClass = teamLogos[team.Constructor.name] || '';
         const shortName = teamShortNames[team.Constructor.name] || team.Constructor.name.substring(0, 3).toUpperCase();
@@ -245,6 +249,8 @@ function displayConstructorStandings(standings) {
 // China GP Sprint Results: 1.Russell 8, 2.Antonelli 7, 3.Norris 6, 4.Leclerc 5, 5.Hamilton 4, 6.Verstappen 3, 7.Piastri 2, 8.Sainz 1
 // China GP Race Results: 1.Antonelli 25, 2.Russell 18, 3.Hamilton 15, 4.Norris 10, 5.Piastri 8, 6.Leclerc 6, 7.Hulkenberg 4, 8.Ocon 2, 9.Bearman 1
 function displayFallbackStandings(container, type) {
+    if (!container) return;
+
     const fallbackData = {
         driver: [
             { position: 1, name: 'George Russell', team: 'Mercedes', points: 51 },
@@ -434,6 +440,8 @@ function initSearch() {
     }
 
     // Store article data for search
+    if (!articlesGrid) return;
+
     const articles = Array.from(articlesGrid.querySelectorAll('.article-preview-card')).map(card => ({
         card,
         title: card.querySelector('.article-preview-title')?.textContent.toLowerCase() || '',
@@ -565,10 +573,18 @@ function startCountdown() {
         const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
         const seconds = Math.floor((distance % (1000 * 60)) / 1000);
 
-        document.getElementById('days').textContent = String(days).padStart(2, '0');
-        document.getElementById('hours').textContent = String(hours).padStart(2, '0');
-        document.getElementById('minutes').textContent = String(minutes).padStart(2, '0');
-        document.getElementById('seconds').textContent = String(seconds).padStart(2, '0');
+        const daysElement = document.getElementById('days');
+        const hoursElement = document.getElementById('hours');
+        const minutesElement = document.getElementById('minutes');
+        const secondsElement = document.getElementById('seconds');
+
+        // Only update if countdown elements exist
+        if (!daysElement || !hoursElement || !minutesElement || !secondsElement) return;
+
+        daysElement.textContent = String(days).padStart(2, '0');
+        hoursElement.textContent = String(hours).padStart(2, '0');
+        minutesElement.textContent = String(minutes).padStart(2, '0');
+        secondsElement.textContent = String(seconds).padStart(2, '0');
     }
 
     updateCountdown();
@@ -679,6 +695,16 @@ const PREDICTION_RACES = RACE_SCHEDULE_2026.filter(race => !race.completed && !r
 
 // Initialize Predictor Game
 function initPredictorGame() {
+    // Only initialize if we're on the predictor page
+    const predictionTitle = document.getElementById('predictionTitle');
+    if (!predictionTitle) {
+        console.log('Predictor: predictionTitle not found');
+        return;
+    }
+
+    // Debug alert to verify function runs
+    // alert('Predictor init running!');
+
     populateDriverDropdowns();
     populateRaceSelector();
     loadUserData();
@@ -693,16 +719,30 @@ function populateDriverDropdowns() {
     const secondSelect = document.getElementById('secondPlace');
     const thirdSelect = document.getElementById('thirdPlace');
 
-    const createOptions = () => {
-        return DRIVERS_2026.map(driver =>
-            `<option value="${driver.name}">${driver.name}</option>`
-        ).join('');
+    if (!firstSelect || !secondSelect || !thirdSelect) return;
+
+    // Create options using textContent to prevent XSS
+    const createOptions = (select) => {
+        DRIVERS_2026.forEach(driver => {
+            const option = document.createElement('option');
+            option.value = driver.name;
+            option.textContent = driver.name;
+            option.style.background = '#1a1a2e';
+            option.style.color = '#ffffff';
+            select.appendChild(option);
+        });
     };
 
-    const options = createOptions();
-    firstSelect.innerHTML = '<option value="">Select Driver</option>' + options;
-    secondSelect.innerHTML = '<option value="">Select Driver</option>' + options;
-    thirdSelect.innerHTML = '<option value="">Select Driver</option>' + options;
+    // Add default option to each select
+    [firstSelect, secondSelect, thirdSelect].forEach(select => {
+        const defaultOption = document.createElement('option');
+        defaultOption.value = '';
+        defaultOption.textContent = 'Select Driver';
+        defaultOption.style.background = '#1a1a2e';
+        defaultOption.style.color = '#ffffff';
+        select.appendChild(defaultOption);
+        createOptions(select);
+    });
 
     // Prevent duplicate selections
     firstSelect.addEventListener('change', () => updateDriverOptions(firstSelect, [secondSelect, thirdSelect]));
@@ -730,43 +770,133 @@ function updateDriverOptions(changedSelect, otherSelects) {
     });
 }
 
-// Populate race selector
+// Populate race selector - only show the upcoming race
 function populateRaceSelector() {
-    const raceSelect = document.getElementById('raceSelect');
-    const races = PREDICTION_RACES.filter(race => !race.cancelled);
+    const predictionTitle = document.getElementById('predictionTitle');
+    const raceInfoName = document.getElementById('raceInfoName');
 
-    raceSelect.innerHTML = '<option value="">-- Choose a Race --</option>' +
-        races.map(race =>
-            `<option value="${race.round}" ${race.next ? 'selected' : ''}>
-                ${race.next ? '🏁 ' : ''}Round ${race.round}: ${race.name} GP (${race.date})
-            </option>`
-        ).join('');
+    if (!predictionTitle || !raceInfoName) return;
+
+    // Find the race marked with next: true from RACE_SCHEDULE_2026 directly
+    const nextRace = RACE_SCHEDULE_2026.find(race => race.next && !race.cancelled);
+
+    if (nextRace) {
+        predictionTitle.innerHTML = `Make Your Prediction for <span style="color: var(--f1-red);">${nextRace.name} GP</span>`;
+        raceInfoName.textContent = `${nextRace.name} GP (${nextRace.date})`;
+    } else {
+        predictionTitle.textContent = 'No Upcoming Race';
+        raceInfoName.textContent = 'Check back soon for the next race!';
+    }
 }
 
 // Load user data from localStorage
 function loadUserData() {
+    const usernameInput = document.getElementById('usernameInput');
+    const userTotalPoints = document.getElementById('userTotalPoints');
+    const usernameStatus = document.getElementById('usernameStatus');
+    const usernameHint = document.getElementById('usernameHint');
+    if (!usernameInput || !userTotalPoints) return;
+
     const username = localStorage.getItem('f1predictor_username');
     const userPoints = localStorage.getItem('f1predictor_points') || '0';
 
     if (username) {
-        document.getElementById('usernameInput').value = username;
+        usernameInput.value = username;
+        // Current user's username is always valid for them
+        if (usernameStatus) {
+            usernameStatus.textContent = '✓';
+            usernameStatus.className = 'username-status available';
+        }
     }
 
-    document.getElementById('userTotalPoints').textContent = userPoints;
+    userTotalPoints.textContent = userPoints;
 
-    // Save username on input
-    document.getElementById('usernameInput').addEventListener('input', (e) => {
-        localStorage.setItem('f1predictor_username', e.target.value.slice(0, 20));
+    // Check if username is taken when input changes (for real-time feedback)
+    usernameInput.addEventListener('input', (e) => {
+        const newUsername = e.target.value.trim();
+        if (newUsername) {
+            // Check if username is available (exclude current user's own username)
+            if (isUsernameTaken(newUsername, username)) {
+                // Username is taken, show error
+                usernameInput.style.borderColor = '#e74c3c';
+                usernameInput.classList.add('taken');
+                if (usernameStatus) {
+                    usernameStatus.textContent = '✗';
+                    usernameStatus.className = 'username-status';
+                }
+                if (usernameHint) {
+                    usernameHint.textContent = 'This username is already taken!';
+                    usernameHint.style.color = '#e74c3c';
+                }
+            } else {
+                usernameInput.style.borderColor = 'rgba(255, 255, 255, 0.2)';
+                usernameInput.classList.remove('taken');
+                if (usernameStatus) {
+                    usernameStatus.textContent = '✓';
+                    usernameStatus.className = 'username-status available';
+                }
+                if (usernameHint) {
+                    usernameHint.textContent = 'Username available!';
+                    usernameHint.style.color = '#2ecc71';
+                }
+            }
+        } else {
+            usernameInput.style.borderColor = '';
+            usernameInput.classList.remove('taken');
+            if (usernameStatus) {
+                usernameStatus.textContent = '✓';
+                usernameStatus.className = 'username-status available';
+            }
+            if (usernameHint) {
+                usernameHint.textContent = 'Choose a unique username to identify your predictions';
+                usernameHint.style.color = '';
+            }
+        }
     });
+
+    // Save username on blur (when leaving the field) - not on every keystroke
+    usernameInput.addEventListener('blur', (e) => {
+        const newUsername = e.target.value.trim();
+        if (newUsername) {
+            if (isUsernameTaken(newUsername, username)) {
+                alert('This username is already taken! Please choose a different username.');
+                e.target.value = '';
+                localStorage.removeItem('f1predictor_username');
+                usernameInput.style.borderColor = '';
+                usernameInput.classList.remove('taken');
+                if (usernameStatus) {
+                    usernameStatus.textContent = '✓';
+                    usernameStatus.className = 'username-status available';
+                }
+                if (usernameHint) {
+                    usernameHint.textContent = 'Choose a unique username to identify your predictions';
+                    usernameHint.style.color = '';
+                }
+            } else {
+                // Only save if username is valid and available
+                localStorage.setItem('f1predictor_username', newUsername.slice(0, 20));
+            }
+        }
+    });
+}
+
+// Check if username is already taken
+// excludeUsername: optional parameter to exclude a specific username (e.g., current user's own username)
+function isUsernameTaken(username, excludeUsername = null) {
+    const predictions = JSON.parse(localStorage.getItem('f1predictor_predictions') || '[]');
+    const takenUsernames = predictions
+        .filter(p => !excludeUsername || p.username.toLowerCase() !== excludeUsername.toLowerCase())
+        .map(p => p.username.toLowerCase());
+    return takenUsernames.includes(username.toLowerCase());
 }
 
 // Submit prediction
 function initSubmitPrediction() {
     const submitBtn = document.getElementById('submitPrediction');
+    if (!submitBtn) return;
 
     submitBtn.addEventListener('click', () => {
         const username = document.getElementById('usernameInput').value.trim();
-        const raceSelect = document.getElementById('raceSelect');
         const firstPlace = document.getElementById('firstPlace').value;
         const secondPlace = document.getElementById('secondPlace').value;
         const thirdPlace = document.getElementById('thirdPlace').value;
@@ -777,8 +907,18 @@ function initSubmitPrediction() {
             return;
         }
 
-        if (!raceSelect.value) {
-            alert('Please select a race!');
+        // Check if username is already taken (but allow current user to use their own username)
+        const currentUser = localStorage.getItem('f1predictor_username');
+        if (isUsernameTaken(username, currentUser)) {
+            alert('The username "' + username + '" is already taken! Please choose a different username.');
+            return;
+        }
+
+        // Get the current race automatically (the one with next: true)
+        const selectedRace = RACE_SCHEDULE_2026.find(race => race.next && !race.cancelled);
+
+        if (!selectedRace) {
+            alert('No upcoming race available for prediction!');
             return;
         }
 
@@ -791,9 +931,6 @@ function initSubmitPrediction() {
             alert('Please select 3 different drivers!');
             return;
         }
-
-        // Get selected race info
-        const selectedRace = RACE_SCHEDULE_2026.find(r => r.round == raceSelect.value);
 
         // Create prediction object
         const prediction = {
@@ -865,6 +1002,8 @@ function showSuccessMessage() {
 // Display user predictions
 function displayUserPredictions() {
     const container = document.getElementById('userPredictions');
+    if (!container) return;
+
     const username = localStorage.getItem('f1predictor_username');
 
     if (!username) {
@@ -880,10 +1019,17 @@ function displayUserPredictions() {
         return;
     }
 
-    container.innerHTML = userPredictions.map(p => `
-        <div class="prediction-item ${p.status}">
+    // Whitelist of valid status values to prevent XSS
+    const validStatuses = ['pending', 'correct', 'partial', 'incorrect'];
+    const isValidStatus = (status) => validStatuses.includes(status);
+
+    container.innerHTML = userPredictions.map(p => {
+        const safeStatus = isValidStatus(p.status) ? p.status : 'pending';
+        return `
+        <div class="prediction-item ${safeStatus}">
             <div class="prediction-race">
                 <div class="prediction-race-name">${sanitizeHTML(p.raceName)} GP - ${sanitizeHTML(p.raceDate)}</div>
+                <div class="prediction-username">🏁 ${sanitizeHTML(p.username)}</div>
                 <div class="prediction-drivers">
                     <span>
                         <svg class="medal" viewBox="0 0 24 24" fill="#FFD700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
@@ -900,8 +1046,8 @@ function displayUserPredictions() {
                 </div>
             </div>
             <span class="prediction-points">${p.points > 0 ? '+' + p.points : '-'} pts</span>
-            <span class="prediction-status ${p.status}">${p.status}</span>
-        </div>
+            <span class="prediction-status ${safeStatus}">${safeStatus}</span>
+        </div>`;
     `).join('');
 }
 
@@ -921,6 +1067,8 @@ function updateTotalPoints() {
 // Load leaderboard
 function loadLeaderboard() {
     const container = document.getElementById('leaderboard');
+    if (!container) return;
+
     const predictions = JSON.parse(localStorage.getItem('f1predictor_predictions') || '[]');
 
     // Calculate points for each user
@@ -1385,3 +1533,163 @@ function showCopySuccess() {
         copyBtn.classList.remove('copied');
     }, 2000);
 }
+
+// ============================================
+// INSTAGRAM EMBED FUNCTION
+// ============================================
+
+// Load Instagram's embed script
+function loadInstagramEmbedScript() {
+    return new Promise((resolve) => {
+        // If script already loaded, just process embeds
+        if (window.instgrm) {
+            window.instgrm.Embeds.process();
+            resolve();
+            return;
+        }
+
+        // Check if script element exists
+        if (document.getElementById('instagram-embed-script')) {
+            // Script exists but might not be loaded yet, wait for it
+            const checkInterval = setInterval(() => {
+                if (window.instgrm) {
+                    clearInterval(checkInterval);
+                    window.instgrm.Embeds.process();
+                    resolve();
+                }
+            }, 100);
+            return;
+        }
+
+        // Create and load the script
+        const script = document.createElement('script');
+        script.id = 'instagram-embed-script';
+        script.async = true;
+        script.src = 'https://www.instagram.com/embed.js';
+        script.onload = () => {
+            if (window.instgrm) {
+                window.instgrm.Embeds.process();
+            }
+            resolve();
+        };
+        document.body.appendChild(script);
+    });
+}
+
+// Process Instagram embeds using the official embed format
+async function loadInstagramEmbed() {
+    // Only run on article pages (not index, calendar, etc.)
+    const articleFile = window.location.pathname.split('/').pop();
+    const excludedPages = ['index.html', 'calendar.html', 'predictor.html', 'championship.html', 'news.html', '', 'index.php'];
+
+    console.log('[Instagram Embed] Page filename:', articleFile);
+
+    if (!articleFile || excludedPages.includes(articleFile)) {
+        console.log('[Instagram Embed] Page excluded, skipping');
+        return;
+    }
+
+    try {
+        console.log('[Instagram Embed] Fetching data.json...');
+        const response = await fetch('data.json');
+        if (!response.ok) {
+            console.log('[Instagram Embed] Failed to fetch data.json');
+            return;
+        }
+        const data = await response.json();
+        console.log('[Instagram Embed] Data loaded:', data);
+
+        // Check if this article matches the latestPost
+        if (data.latestPost && data.latestPost.articleLink === articleFile) {
+            const embedContainer = document.getElementById('instagramEmbed');
+            if (!embedContainer) return;
+
+            const sourceLink = data.latestPost.sourceLink;
+
+            // Extract the post ID from Instagram URL
+            // URL format: https://www.instagram.com/USERNAME/p/POST_ID/
+            const postIdMatch = sourceLink.match(/\/p\/([a-zA-Z0-9_-]+)/);
+            if (!postIdMatch) {
+                console.log('Could not extract Instagram post ID');
+                return;
+            }
+            const postId = postIdMatch[1];
+
+            // Clear existing content and create Instagram embed blockquote
+            embedContainer.innerHTML = `
+                <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="${sourceLink}" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
+                    <div style="padding:16px;">
+                        <a href="${sourceLink}" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank">
+                            <div style=" display: flex; flex-direction: row; align-items: center;">
+                                <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div>
+                                <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;">
+                                    <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div>
+                                    <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
+                                </div>
+                            </div>
+                            <div style="padding: 19% 0;"></div>
+                            <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M456.87788,74.2613329 C454.479557,74.2613329 452.529207,72.3109829 452.529207,69.9126602 C452.529207,67.5143376 454.479557,65.5639876 456.87788,65.5639876 C459.276202,65.5639876 461.226552,67.5143376 461.226552,69.9126602 C461.226552,72.3109829 459.276202,74.2613329 456.87788,74.2613329 M475.993138,67.8185281 C476.321347,68.9514673 476.540775,70.4259956 476.603031,72.3974664 L476.610938,74.2667377 L476.610938,81.2333426 L476.603031,83.1026139 C476.540775,85.0740847 476.321347,86.548613 475.993138,87.6815522 C475.697984,88.6939318 475.254886,89.4497679 474.477422,90.2272323 C473.699958,91.0046967 472.944121,91.4477943 471.931742,91.7429488 C470.798803,92.0711582 469.324274,92.2905863 467.352804,92.3528422 L465.483532,92.3607491 L458.516928,92.3607491 L456.647656,92.3528422 C454.676186,92.2905863 453.201657,92.0711582 452.068718,91.7429488 C451.056339,91.4477943 450.300502,91.0046967 449.523038,90.2272323 C448.745574,89.4497679 448.302476,88.6939318 448.007322,87.6815522 C447.679112,86.548613 447.459684,85.0740847 447.397428,83.1026139 L447.389522,81.2333426 L447.389522,74.2667377 L447.397428,72.3974664 C447.459684,70.4259956 447.679112,68.9514673 448.007322,67.8185281 C448.302476,66.8061485 448.745574,66.0503124 449.523038,65.272848 C450.300502,64.4953836 451.056339,64.052286 452.068718,63.7571315 C453.201657,63.4289221 454.676186,63.209494 456.647656,63.1472381 L458.516928,63.1393312 L465.483532,63.1393312 L467.352804,63.1472381 C469.324274,63.209494 470.798803,63.4289221 471.931742,63.7571315 C472.944121,64.052286 473.699958,64.4953836 474.477422,65.272848 C475.254886,66.0503124 475.697984,66.8061485 475.993138,67.8185281 M452.068718,59.0465248 C448.064332,59.0465248 447.374563,59.0287029 445.985551,59.0697309 C443.339915,59.1491676 441.558537,59.5745665 440.007548,60.4801524 C438.530603,61.3443717 437.345533,62.5294418 436.481314,64.0063865 C435.575728,65.5573758 435.150329,67.3387536 435.070892,69.9843897 C435.029864,71.3734015 435.047686,72.0631711 435.047686,76.0675565 L435.047686,79.4325238 C435.047686,83.4369091 435.029864,84.1266788 435.070892,85.5156906 C435.150329,88.1613266 435.575728,89.9427044 436.481314,91.4936938 C437.345533,92.9706384 438.530603,94.1557086 440.007548,95.0199279 C441.558537,95.9255137 443.339915,96.3509127 445.985551,96.4303494 C447.374563,96.4713773 448.064332,96.4535555 452.068718,96.4535555 L471.931742,96.4535555 C475.936127,96.4535555 476.625897,96.4713773 478.014909,96.4303494 C480.660545,96.3509127 482.441923,95.9255137 483.992912,95.0199279 C485.469857,94.1557086 486.654927,92.9706384 487.519146,91.4936938 C488.424732,89.9427044 488.850131,88.1613266 488.929568,85.5156906 C488.970596,84.1266788 488.952774,83.4369091 488.952774,79.4325238 L488.952774,76.0675565 C488.952774,72.0631711 488.970596,71.3734015 488.929568,69.9843897 C488.850131,67.3387536 488.424732,65.5573758 487.519146,64.0063865 C486.654927,62.5294418 485.469857,61.3443717 483.992912,60.4801524 C482.441923,59.5745665 480.660545,59.1491676 478.014909,59.0697309 C476.625897,59.0287029 475.936127,59.0465248 471.931742,59.0465248 L452.068718,59.0465248 M452.068718,55.0465248 L471.931742,55.0465248 C476.094893,55.0465248 476.847936,55.0664032 478.226141,55.1069455 C481.448453,55.2009901 483.743471,55.8028866 485.78275,56.9446256 C487.777201,58.0608267 489.399449,59.683075 490.51565,61.677526 C491.657389,63.7168049 492.259285,66.0118227 492.35333,69.2341352 C492.393872,70.6123402 492.413751,71.3653827 492.413751,75.528534 L492.413751,79.9715463 C492.413751,84.1346975 492.393872,84.88774 492.35333,86.2659451 C492.259285,89.4882576 491.657389,91.7832753 490.51565,93.8225543 C489.399449,95.8170052 487.777201,97.4392536 485.78275,98.5554547 C483.743471,99.6971937 481.448453,100.29909 478.226141,100.393135 C476.847936,100.433677 476.094893,100.453556 471.931742,100.453556 L452.068718,100.453556 C447.905566,100.453556 447.152524,100.433677 445.774319,100.393135 C442.552006,100.29909 440.256989,99.6971937 438.21771,98.5554547 C436.223259,97.4392536 434.60101,95.8170052 433.484809,93.8225543 C432.34307,91.7832753 431.741174,89.4882576 431.647129,86.2659451 C431.606587,84.88774 431.586709,84.1346975 431.586709,79.9715463 L431.586709,75.528534 C431.586709,71.3653827 431.606587,70.6123402 431.647129,69.2341352 C431.741174,66.0118227 432.34307,63.7168049 433.484809,61.677526 C434.60101,59.683075 436.223259,58.0608267 438.21771,56.9446256 C440.256989,55.8028866 442.552006,55.2009901 445.774319,55.1069455 C447.152524,55.0664032 447.905566,55.0465248 452.068718,55.0465248"></path></g></g></svg></div>
+                        </a>
+                    </div>
+                </blockquote>
+            `;
+
+            // Show the container
+            embedContainer.style.display = 'block';
+
+            // Load Instagram embed script and process embeds
+            await loadInstagramEmbedScript();
+        }
+    } catch (error) {
+        console.log('[Instagram Embed] Error:', error);
+    }
+}
+
+// Fallback: Direct embed for antonelli-maiden-win.html without needing data.json
+function loadDirectInstagramEmbed() {
+    const embedContainer = document.getElementById('instagramEmbed');
+    if (!embedContainer) return;
+
+    // Check if we're on the antonelli article
+    const articleFile = window.location.pathname.split('/').pop();
+    if (articleFile !== 'antonelli-maiden-win.html') return;
+
+    console.log('[Instagram Embed] Using direct embed for antonelli-maiden-win.html');
+
+    const sourceLink = 'https://www.instagram.com/f1wow/p/DV8iHuhjKJH/';
+
+    embedContainer.innerHTML = `
+        <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="${sourceLink}" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
+            <div style="padding:16px;">
+                <a href="${sourceLink}" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank">
+                    <div style=" display: flex; flex-direction: row; align-items: center;">
+                        <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div>
+                        <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;">
+                            <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div>
+                            <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
+                        </div>
+                    </div>
+                    <div style="padding: 19% 0;"></div>
+                    <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1" xmlns="http://www.w3.org/2000/svg"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></g></g></svg></div>
+                </a>
+            </div>
+        </blockquote>
+    `;
+
+    embedContainer.style.display = 'block';
+    loadInstagramEmbedScript();
+}
+
+// Call on page load
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadInstagramEmbed();
+
+    // Fallback: If embed container is still hidden, try direct embed
+    setTimeout(() => {
+        const embedContainer = document.getElementById('instagramEmbed');
+        if (embedContainer && embedContainer.style.display === 'none') {
+            console.log('[Instagram Embed] Primary method failed, trying fallback...');
+            loadDirectInstagramEmbed();
+        }
+    }, 1000);
+});
