@@ -1618,11 +1618,9 @@ function showCopySuccess() {
 // ============================================
 
 // Store subscribers in localStorage
-// When you publish a new article, click "Notify Subscribers" button
-// This opens a pre-filled email with all subscriber BCC'd
+// When you publish new articles, use Admin Panel to notify all subscribers
 
-// Handle subscribe form - Stores subscriber locally
-async function handleSubscribe(event) {
+function handleSubscribe(event) {
     event.preventDefault();
     const form = event.target;
     const emailInput = document.getElementById('subscribeEmail');
@@ -1647,17 +1645,15 @@ async function handleSubscribe(event) {
         return;
     }
 
-    // Show loading state
-    btnText.textContent = 'Subscribing...';
-    btn.disabled = true;
-
     // Store subscriber locally
     subscribers.push({
         email: email,
-        date: new Date().toISOString(),
-        ip: 'stored-locally'
+        date: new Date().toISOString()
     });
     localStorage.setItem('f1wow_subscribers', JSON.stringify(subscribers));
+
+    // Update count
+    updateSubscriberCount();
 
     // Show success
     btnText.textContent = 'Subscribed! ✓';
