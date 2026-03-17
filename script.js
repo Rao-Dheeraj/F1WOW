@@ -1961,8 +1961,27 @@ function loadDirectInstagramEmbed() {
     loadInstagramEmbedScript();
 }
 
+// Theme Toggle Functionality
+function initThemeToggle() {
+    const themeToggle = document.getElementById('themeToggle');
+    if (!themeToggle) return;
+
+    // Get saved theme or default to dark
+    const savedTheme = localStorage.getItem('theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', savedTheme);
+
+    themeToggle.addEventListener('click', () => {
+        const currentTheme = document.documentElement.getAttribute('data-theme');
+        const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+        document.documentElement.setAttribute('data-theme', newTheme);
+        localStorage.setItem('theme', newTheme);
+    });
+}
+
 // Call on page load
 document.addEventListener('DOMContentLoaded', async () => {
+    initThemeToggle();
     await loadInstagramEmbed();
 
     // Fallback: If embed container is still hidden, try direct embed

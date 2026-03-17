@@ -18,6 +18,26 @@
     --team-alphatauri: #5E8FAA;
     --team-alfaromeo: #C92D4B;
     --team-haas: #B6BABD;
+    --bg-primary: #0D0D12;
+    --bg-secondary: #15151E;
+    --bg-card: #1F1F2B;
+    --text-primary: #FFFFFF;
+    --text-secondary: #949498;
+    --border-color: #38383F;
+    --nav-bg: rgba(21, 21, 30, 0.95);
+}
+
+/* Light Mode Variables */
+[data-theme="light"] {
+    --bg-primary: #FFFFFF;
+    --bg-secondary: #F5F5F5;
+    --bg-card: #FFFFFF;
+    --text-primary: #15151E;
+    --text-secondary: #555555;
+    --border-color: #E0E0E0;
+    --nav-bg: rgba(255, 255, 255, 0.95);
+    --f1-white: #15151E;
+    --f1-black: #FFFFFF;
 }
 
 html {
@@ -32,10 +52,11 @@ html {
 
 body {
     font-family: 'Roboto', sans-serif;
-    background: linear-gradient(135deg, var(--f1-black) 0%, var(--f1-dark) 50%, #181824 100%);
-    color: var(--f1-white);
+    background: linear-gradient(135deg, var(--bg-primary) 0%, var(--bg-secondary) 50%, var(--f1-dark) 100%);
+    color: var(--text-primary);
     line-height: 1.6;
     min-height: 100vh;
+    transition: background 0.3s ease, color 0.3s ease;
 }
 
 /* Animated Background */
@@ -160,6 +181,42 @@ body::before {
     color: var(--f1-light-gray);
     text-transform: uppercase;
     letter-spacing: 1px;
+}
+
+/* Theme Toggle Button */
+.theme-toggle {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 14px;
+    border: 2px solid var(--f1-red);
+    border-radius: 5px;
+    background: transparent;
+    color: var(--text-primary);
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.theme-toggle:hover {
+    background: var(--f1-red);
+    box-shadow: 0 0 20px rgba(225, 6, 0, 0.5);
+    transform: translateY(-2px);
+}
+
+.theme-toggle .sun-icon {
+    display: block;
+}
+
+.theme-toggle .moon-icon {
+    display: none;
+}
+
+[data-theme="light"] .theme-toggle .sun-icon {
+    display: none;
+}
+
+[data-theme="light"] .theme-toggle .moon-icon {
+    display: block;
 }
 
 /* Subscriber Count in Nav */
