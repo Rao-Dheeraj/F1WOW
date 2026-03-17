@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const glob = require('glob');
 
-const SITE_URL = 'https://f1wow.com';
+const SITE_URL = 'https://motorsports-news.github.io/F1WOW';
 const OUTPUT_FILE = path.join(__dirname, '..', 'sitemap.xml');
 
 // Priority mapping
