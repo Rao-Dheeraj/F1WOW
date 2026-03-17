@@ -38,9 +38,12 @@
     <main class="main">
         <!-- Hero Section -->
         <section class="hero-section">
-            <!-- F1 Car GIF Background -->
+            <!-- F1 Car Hero Background (Optimized: 24KB WebP vs 1.8MB GIF) -->
             <div class="hero-car-bg">
-                <img src="F1 car GIF.gif" alt="F1 Car" class="hero-car-gif">
+                <picture class="hero-car-gif">
+                    <source srcset="f1-car-hero.webp" type="image/webp">
+                    <img src="f1-car-hero.jpg" alt="F1 Car" loading="lazy">
+                </picture>
             </div>
             <!-- Speed Lines Overlay -->
             <div class="hero-speed-lines">
