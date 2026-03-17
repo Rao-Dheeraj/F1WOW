@@ -1,5 +1,12 @@
 // FormulaNews - F1wow Website Script
 
+// Utility: Sanitize HTML to prevent XSS attacks
+function sanitizeHTML(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+}
+
 // F1 API Endpoints - Primary and backup
 const API_BASE = 'https://jolpica-f1.vercel.app/api/f1';
 const ERGAST_API = 'https://ergast.com/api/f1';
@@ -528,7 +535,7 @@ function initSearch() {
         if (searchInput.value.trim() !== '' || currentFilter !== 'all') {
             searchResults.innerHTML = `
                 <p style="color: var(--f1-light-gray); font-size: 0.9rem; text-align: center;">
-                    Found ${visibleCount} of ${total} articles
+                    Found ${visible} of ${total} articles
                 </p>
             `;
         } else {
@@ -538,8 +545,10 @@ function initSearch() {
 }
 
 // Countdown Timer for Next Race (Japanese GP 2026 - March 27-29)
+// NOTE: Update the raceDate manually for each upcoming race
 function startCountdown() {
     // Japanese GP 2026 date (March 29, 2026)
+    // TODO: Make this dynamic based on RACE_SCHEDULE_2026 with 'next: true'
     const raceDate = new Date('2026-03-29T06:00:00Z').getTime();
 
     function updateCountdown() {
@@ -567,16 +576,16 @@ function startCountdown() {
 }
 
 // Fetch Instagram follower count for @f1wow
+// NOTE: Instagram's public API (?__a=1) is deprecated. This will use the fallback value.
+// For production, implement Instagram Basic Display API with proper authentication.
 async function fetchInstagramFollowers() {
     const followerElement = document.getElementById('followerCount');
     if (!followerElement) return;
 
-    // Using a free API to get Instagram followers
-    // Note: For production, you may need to use Instagram Basic Display API
     const username = 'f1wow';
 
     try {
-        // Using an alternative API approach
+        // NOTE: This endpoint no longer works - Instagram deprecated public API access
         const response = await fetch(`https://www.instagram.com/${username}/?__a=1&__d=dis`, {
             headers: {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
@@ -592,7 +601,7 @@ async function fetchInstagramFollowers() {
             }
         }
     } catch (error) {
-        console.log('Primary API failed, trying backup...');
+        // Primary API failed - using fallback
     }
 
     // Backup: Use a counter service or set manual value
@@ -874,19 +883,19 @@ function displayUserPredictions() {
     container.innerHTML = userPredictions.map(p => `
         <div class="prediction-item ${p.status}">
             <div class="prediction-race">
-                <div class="prediction-race-name">${p.raceName} GP - ${p.raceDate}</div>
+                <div class="prediction-race-name">${sanitizeHTML(p.raceName)} GP - ${sanitizeHTML(p.raceDate)}</div>
                 <div class="prediction-drivers">
                     <span>
                         <svg class="medal" viewBox="0 0 24 24" fill="#FFD700"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        ${p.predictions[0]}
+                        ${sanitizeHTML(p.predictions[0])}
                     </span>
                     <span>
                         <svg class="medal" viewBox="0 0 24 24" fill="#C0C0C0"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        ${p.predictions[1]}
+                        ${sanitizeHTML(p.predictions[1])}
                     </span>
                     <span>
                         <svg class="medal" viewBox="0 0 24 24" fill="#CD7F32"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                        ${p.predictions[2]}
+                        ${sanitizeHTML(p.predictions[2])}
                     </span>
                 </div>
             </div>
@@ -954,7 +963,7 @@ function loadLeaderboard() {
         return `
             <div class="leaderboard-item ${isCurrentUser ? 'current-user' : ''}">
                 <div class="leaderboard-position ${positionClass}">${index + 1}</div>
-                <div class="leaderboard-name ${isCurrentUser ? 'current' : ''}">${entry.name}${isCurrentUser ? ' (You)' : ''}</div>
+                <div class="leaderboard-name ${isCurrentUser ? 'current' : ''}">${sanitizeHTML(entry.name)}${isCurrentUser ? ' (You)' : ''}</div>
                 <div class="leaderboard-points">${entry.points}</div>
             </div>
         `;
@@ -1001,8 +1010,6 @@ let currentGraphType = 'driver';
 let selectedDrivers = ['georgeRussell', 'kimiAntonelli', 'charlesLeclerc', 'lewisHamilton'];
 let selectedConstructors = ['mercedes', 'ferrari', 'mclaren', 'redBull'];
 
-console.log('CHAMPIONSHIP_DATA_2026 loaded:', CHAMPIONSHIP_DATA_2026);
-
 // Category Tabs Filter
 function initCategoryTabs() {
     const categoryTabs = document.querySelectorAll('.category-tab');
@@ -1014,13 +1021,22 @@ function initCategoryTabs() {
     // Get all article cards
     const articles = Array.from(articlesGrid.querySelectorAll('.article-preview-card'));
 
+    // Set initial count
+    if (articlesCount) {
+        articlesCount.textContent = articles.length;
+    }
+
     categoryTabs.forEach(tab => {
         tab.addEventListener('click', () => {
             const category = tab.dataset.category;
 
-            // Update active tab
-            categoryTabs.forEach(t => t.classList.remove('active'));
+            // Update active tab and ARIA attributes
+            categoryTabs.forEach(t => {
+                t.classList.remove('active');
+                t.setAttribute('aria-selected', 'false');
+            });
             tab.classList.add('active');
+            tab.setAttribute('aria-selected', 'true');
 
             // Filter articles
             let visibleCount = 0;
@@ -1066,10 +1082,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function initChampionshipGraph() {
-    console.log('initChampionshipGraph called');
     const typeBtns = document.querySelectorAll('.graph-type-btn');
     const championshipSelect = document.getElementById('championshipType');
-    console.log('typeBtns:', typeBtns.length, 'championshipSelect:', !!championshipSelect);
 
     if (typeBtns.length > 0) {
         typeBtns.forEach(btn => {
@@ -1108,30 +1122,17 @@ function initChampionshipGraph() {
 }
 
 function renderGraph() {
-    console.log('renderGraph called, CHAMPIONSHIP_DATA_2026:', !!CHAMPIONSHIP_DATA_2026, 'currentGraphType:', currentGraphType);
     const svg = document.getElementById('championshipSvg');
     const legend = document.getElementById('graphLegend');
-    console.log('svg:', !!svg, 'legend:', !!legend);
     if (!svg) return;
 
     const data = CHAMPIONSHIP_DATA_2026[currentGraphType];
-    console.log('data:', data);
     const rounds = data.rounds;
     const selected = currentGraphType === 'driver' ? selectedDrivers : selectedConstructors;
 
     // Clear previous
     svg.innerHTML = '';
     legend.innerHTML = '';
-
-    // Test: Add a visible circle to verify SVG is working
-    const testCircle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');
-    testCircle.setAttribute('cx', '400');
-    testCircle.setAttribute('cy', '200');
-    testCircle.setAttribute('r', '50');
-    testCircle.setAttribute('fill', 'red');
-    testCircle.setAttribute('class', 'test-circle');
-    svg.appendChild(testCircle);
-    console.log('Test circle added');
 
     // Graph dimensions
     const width = 800;

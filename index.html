@@ -103,7 +103,7 @@
                     </svg>
                 </div>
                 <input type="text" id="searchInput" placeholder="Search articles, drivers, races..." class="search-input">
-                <button class="search-toggle" id="searchToggle" title="Filter options">
+                <button class="search-toggle" id="searchToggle" aria-label="Toggle search filters" title="Filter options">
                     <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                         <path d="M4 6h16M4 12h16M4 18h7"/>
                     </svg>
@@ -159,32 +159,37 @@
                     </div>
                 </a>
 
+                <!-- More Articles Header -->
+                <div class="section-header sub-header">
+                    <h3>More Articles</h3>
+                </div>
+
                 <!-- Category Tabs -->
-                <div class="category-tabs-wrapper">
+                <div class="category-tabs-wrapper" role="tablist" aria-label="Article categories">
                     <div class="category-tabs">
-                        <button class="category-tab active" data-category="all">
+                        <button class="category-tab active" data-category="all" role="tab" aria-selected="true" aria-label="Show all articles">
                             <span class="tab-icon">📰</span>
                             All
                         </button>
-                        <button class="category-tab" data-category="race">
+                        <button class="category-tab" data-category="race" role="tab" aria-selected="false" aria-label="Show race reports">
                             <span class="tab-icon">🏁</span>
                             Race Reports
                         </button>
-                        <button class="category-tab" data-category="news">
+                        <button class="category-tab" data-category="news" role="tab" aria-selected="false" aria-label="Show news articles">
                             <span class="tab-icon">📢</span>
                             News
                         </button>
-                        <button class="category-tab" data-category="technical">
+                        <button class="category-tab" data-category="technical" role="tab" aria-selected="false" aria-label="Show technical articles">
                             <span class="tab-icon">⚙️</span>
                             Technical
                         </button>
                     </div>
                     <div class="articles-count">
-                        <span id="articlesCount">4</span> articles
+                        <span id="articlesCount">-</span> articles
                     </div>
                 </div>
 
-                <!-- More Articles Grid -->
+                <!-- Articles Grid -->
                 <div class="articles-grid" id="articlesGrid">
                     <!-- Article 2: Verstappen -->
                     <a href="verstappen-article.html" class="article-preview-card">

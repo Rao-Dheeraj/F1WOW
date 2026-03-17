@@ -124,8 +124,6 @@
     <script>
         // Inline graph rendering for championship page
         (function() {
-            console.log('Championship inline script loading...');
-
             // Championship data
             const CHAMPIONSHIP_DATA = {
                 driver: {
@@ -151,21 +149,16 @@
             let selectedConstructors = ['mercedes', 'ferrari', 'mclaren'];
 
             function renderGraph() {
-                console.log('renderGraph() called');
                 const svg = document.getElementById('championshipSvg');
                 const legend = document.getElementById('graphLegend');
                 if (!svg) {
-                    console.error('SVG element not found!');
                     return;
                 }
 
                 const data = CHAMPIONSHIP_DATA[currentGraphType];
                 if (!data) {
-                    console.error('Data not found for type:', currentGraphType);
                     return;
                 }
-
-                console.log('Rendering graph with data:', data);
 
                 const rounds = data.rounds;
                 const selected = currentGraphType === 'driver' ? selectedDrivers : selectedConstructors;
@@ -281,13 +274,10 @@
                     `;
                     legend.appendChild(legendItem);
                 });
-
-                console.log('Graph rendered!');
             }
 
             // Initialize
             function initGraph() {
-                console.log('Initializing championship graph...');
 
                 // Button handlers
                 const typeBtns = document.querySelectorAll('.graph-type-btn');
