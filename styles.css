@@ -31,7 +31,7 @@ html {
 }
 
 body {
-    font-family: 'Roboto', sans-serif;
+    font-family: 'Chakra Petch', sans-serif;
     background: linear-gradient(135deg, var(--f1-black) 0%, var(--f1-dark) 50%, #181824 100%);
     color: var(--f1-white);
     line-height: 1.6;
@@ -77,14 +77,15 @@ body::before {
 }
 
 .brand h1 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 900;
+    font-family: 'Racing Sans One', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 400;
     background: linear-gradient(90deg, var(--f1-white) 0%, var(--f1-red) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
-    letter-spacing: 2px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
 }
 
 .subtitle {
@@ -407,10 +408,10 @@ body::before {
 }
 
 .hero-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.5rem;
-    font-weight: 900;
-    line-height: 1.2;
+    font-family: 'Racing Sans One', sans-serif;
+    font-size: 3rem;
+    font-weight: 400;
+    line-height: 1.1;
     margin-bottom: 10px;
     background: linear-gradient(135deg, var(--f1-white) 0%, var(--f1-red) 50%, var(--f1-white) 100%);
     background-size: 200% auto;
@@ -418,6 +419,8 @@ body::before {
     -webkit-text-fill-color: transparent;
     background-clip: text;
     animation: shimmer 3s ease-in-out infinite;
+    text-transform: uppercase;
+    letter-spacing: 6px;
 }
 
 @keyframes shimmer {
@@ -503,9 +506,11 @@ body::before {
 }
 
 .countdown-label {
-    font-size: 0.5rem;
+    font-family: 'Teko', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 500;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 2px;
     color: var(--f1-light-gray);
 }
 
@@ -531,14 +536,14 @@ body::before {
     display: inline-flex;
     align-items: center;
     gap: 6px;
-    padding: 10px 18px;
+    padding: 12px 22px;
     border-radius: 25px;
-    font-family: 'Orbitron', sans-serif;
-    font-size: 0.7rem;
+    font-family: 'Teko', sans-serif;
+    font-size: 1.1rem;
     font-weight: 600;
     text-decoration: none;
     text-transform: uppercase;
-    letter-spacing: 0.5px;
+    letter-spacing: 2px;
     transition: all 0.3s ease;
     border: 2px solid transparent;
 }
@@ -961,11 +966,13 @@ body::before {
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 25px;
     color: rgba(255, 255, 255, 0.6);
-    font-family: 'Roboto', sans-serif;
-    font-size: 0.85rem;
+    font-family: 'Teko', sans-serif;
+    font-size: 1rem;
     font-weight: 500;
     cursor: pointer;
     transition: all 0.3s ease;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .category-tab:hover {
@@ -1090,7 +1097,7 @@ body::before {
 }
 
 .featured-title {
-    font-family: 'Orbitron', sans-serif;
+    font-family: 'Racing Sans One', sans-serif;
     font-size: 1.8rem;
     font-weight: 700;
     color: var(--f1-white);
@@ -1249,8 +1256,9 @@ body::before {
 }
 
 .article-preview-title {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.1rem;
+    font-family: 'Racing Sans One', sans-serif;
+    font-size: 1.3rem;
+    font-weight: 400;
     font-weight: 700;
     margin-bottom: 12px;
     line-height: 1.4;
@@ -1306,11 +1314,11 @@ body::before {
 }
 
 .section-header h2 {
-    font-family: 'Orbitron', sans-serif;
-    font-size: 1.8rem;
-    font-weight: 700;
+    font-family: 'Racing Sans One', sans-serif;
+    font-size: 2.2rem;
+    font-weight: 400;
     text-transform: uppercase;
-    letter-spacing: 3px;
+    letter-spacing: 5px;
     background: linear-gradient(135deg, var(--f1-white) 0%, var(--f1-silver) 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
