@@ -1305,7 +1305,29 @@ document.addEventListener('DOMContentLoaded', () => {
     initChampionshipGraph();
     initSubscribeForms();
     updateSubscriberCount();
+    initReadingProgress();
 });
+
+// Reading Progress Bar - F1 Telemetry Style
+function initReadingProgress() {
+    const progressBar = document.getElementById('readingProgress');
+    if (!progressBar) return;
+
+    let ticking = false;
+
+    window.addEventListener('scroll', () => {
+        if (!ticking) {
+            window.requestAnimationFrame(() => {
+                const scrollTop = window.scrollY;
+                const docHeight = document.documentElement.scrollHeight - window.innerHeight;
+                const progress = (scrollTop / docHeight) * 100;
+                progressBar.style.width = progress + '%';
+                ticking = false;
+            });
+            ticking = true;
+        }
+    });
+}
 
 function initChampionshipGraph() {
     const typeBtns = document.querySelectorAll('.graph-type-btn');
