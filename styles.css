@@ -1274,6 +1274,22 @@ body::before {
     font-family: Georgia, serif;
 }
 
+.quote-text {
+    margin: 0;
+    position: relative;
+    z-index: 1;
+    line-height: 1.6;
+}
+
+.quote-attribution {
+    display: block;
+    margin-top: 15px;
+    font-size: 0.9rem;
+    color: var(--f1-red);
+    font-style: normal;
+    font-weight: 500;
+}
+
 .article-source {
     margin-top: 15px;
     padding-top: 15px;
