@@ -775,7 +775,6 @@ function initPredictorGame() {
     // Only initialize if we're on the predictor page
     const predictionTitle = document.getElementById('predictionTitle');
     if (!predictionTitle) {
-        console.log('Predictor: predictionTitle not found');
         return;
     }
 
@@ -1872,22 +1871,17 @@ async function loadInstagramEmbed() {
     const articleFile = window.location.pathname.split('/').pop();
     const excludedPages = ['index.html', 'calendar.html', 'predictor.html', 'championship.html', 'news.html', '', 'index.php'];
 
-    console.log('[Instagram Embed] Page filename:', articleFile);
 
     if (!articleFile || excludedPages.includes(articleFile)) {
-        console.log('[Instagram Embed] Page excluded, skipping');
         return;
     }
 
     try {
-        console.log('[Instagram Embed] Fetching data.json...');
         const response = await fetch('data.json');
         if (!response.ok) {
-            console.log('[Instagram Embed] Failed to fetch data.json');
             return;
         }
         const data = await response.json();
-        console.log('[Instagram Embed] Data loaded:', data);
 
         // Check if this article matches the latestPost
         if (data.latestPost && data.latestPost.articleLink === articleFile) {
@@ -1900,7 +1894,6 @@ async function loadInstagramEmbed() {
             // URL format: https://www.instagram.com/USERNAME/p/POST_ID/
             const postIdMatch = sourceLink.match(/\/p\/([a-zA-Z0-9_-]+)/);
             if (!postIdMatch) {
-                console.log('Could not extract Instagram post ID');
                 return;
             }
             const postId = postIdMatch[1];
@@ -1931,7 +1924,6 @@ async function loadInstagramEmbed() {
             await loadInstagramEmbedScript();
         }
     } catch (error) {
-        console.log('[Instagram Embed] Error:', error);
     }
 }
 
@@ -1944,7 +1936,6 @@ function loadDirectInstagramEmbed() {
     const articleFile = window.location.pathname.split('/').pop();
     if (articleFile !== 'antonelli-maiden-win.html') return;
 
-    console.log('[Instagram Embed] Using direct embed for antonelli-maiden-win.html');
 
     const sourceLink = 'https://www.instagram.com/f1wow/p/DV8iHuhjKJH/';
 
@@ -1978,7 +1969,6 @@ document.addEventListener('DOMContentLoaded', async () => {
     setTimeout(() => {
         const embedContainer = document.getElementById('instagramEmbed');
         if (embedContainer && embedContainer.style.display === 'none') {
-            console.log('[Instagram Embed] Primary method failed, trying fallback...');
             loadDirectInstagramEmbed();
         }
     }, 1000);

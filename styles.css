@@ -127,18 +127,32 @@ body::before {
     display: flex;
     align-items: center;
     gap: 8px;
+    color: var(--f1-white);
     padding: 10px 20px;
-    background: rgba(225, 6, 0, 0.1);
     border: 2px solid var(--f1-red);
     border-radius: 5px;
     font-weight: 500;
+    transition: all 0.3s ease;
+    text-transform: uppercase;
+    font-size: 0.85rem;
+    letter-spacing: 1px;
+}
+
+.follower-counter:hover {
+    background: var(--f1-red);
+    box-shadow: 0 0 20px rgba(225, 6, 0, 0.5);
+    transform: translateY(-2px);
 }
 
 .follower-count {
     font-family: 'Orbitron', sans-serif;
     font-size: 1.1rem;
     font-weight: 700;
-    color: var(--f1-white);
+    color: var(--f1-red);
+}
+
+.follower-counter:hover .follower-count {
+    color: white;
 }
 
 .follower-label {
