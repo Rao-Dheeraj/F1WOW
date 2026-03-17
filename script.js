@@ -1612,6 +1612,77 @@ function showCopySuccess() {
 }
 
 // ============================================
+// SUBSCRIBE FUNCTION
+// ============================================
+
+// Handle subscribe form submission
+function handleSubscribe(event) {
+    event.preventDefault();
+    const emailInput = document.getElementById('subscribeEmail');
+    const email = emailInput.value;
+    const btn = event.target.querySelector('.subscribe-btn');
+    const btnText = btn.querySelector('.btn-text');
+    const originalText = btnText.textContent;
+
+    // Show loading state
+    btnText.textContent = 'Subscribing...';
+    btn.disabled = true;
+
+    // Simulate API call (replace with actual API endpoint)
+    setTimeout(() => {
+        // Store subscription in localStorage
+        const subscribers = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
+        if (!subscribers.includes(email)) {
+            subscribers.push({
+                email: email,
+                date: new Date().toISOString()
+            });
+            localStorage.setItem('f1wow_subscribers', JSON.stringify(subscribers));
+        }
+
+        // Show success message
+        btnText.textContent = 'Subscribed! ✓';
+        btn.style.background = '#22c55e';
+
+        // Reset form
+        emailInput.value = '';
+
+        // Show notification
+        showNotification('Thanks for subscribing! 🏁 Check your inbox for confirmation.');
+
+        // Reset button after delay
+        setTimeout(() => {
+            btnText.textContent = originalText;
+            btn.style.background = '';
+            btn.disabled = false;
+        }, 3000);
+    }, 1000);
+}
+
+// Show notification message
+function showNotification(message) {
+    // Remove existing notification if any
+    const existing = document.querySelector('.subscribe-notification');
+    if (existing) existing.remove();
+
+    const notification = document.createElement('div');
+    notification.className = 'subscribe-notification';
+    notification.innerHTML = `
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M20 6L9 17l-5-5"/>
+        </svg>
+        ${message}
+    `;
+    document.body.appendChild(notification);
+
+    // Auto remove after 4 seconds
+    setTimeout(() => {
+        notification.classList.add('hiding');
+        setTimeout(() => notification.remove(), 300);
+    }, 4000);
+}
+
+// ============================================
 // INSTAGRAM EMBED FUNCTION
 // ============================================
 
