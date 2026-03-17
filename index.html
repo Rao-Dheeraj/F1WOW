@@ -31,13 +31,6 @@
                     </svg>
                     @f1wow
                 </a>
-                <div class="subscriber-count" title="Newsletter subscribers" onclick="openAdminPanel(event)">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                        <polyline points="22,6 12,13 2,6"/>
-                    </svg>
-                    <span id="subscriberCount">0</span>
-                </div>
             </nav>
         </div>
     </header>
@@ -320,56 +313,5 @@
     </button>
 
     <script src="script.js"></script>
-
-    <!-- Admin Panel (Hidden by default, click subscriber count to open) -->
-    <div id="adminPanel" class="admin-panel">
-        <div class="admin-content">
-            <div class="admin-header">
-                <h3>📧 Newsletter Admin</h3>
-                <button class="admin-close" onclick="closeAdminPanel()">×</button>
-            </div>
-            <div class="admin-stats">
-                <div class="admin-stat">
-                    <span class="stat-value" id="totalSubscribers">0</span>
-                    <span class="stat-label">Total Subscribers</span>
-                </div>
-            </div>
-            <div class="admin-actions">
-                <button class="admin-btn notify-btn" onclick="notifyAllSubscribers()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-                        <polyline points="22,6 12,13 2,6"/>
-                    </svg>
-                    Notify All Subscribers
-                </button>
-                <button class="admin-btn export-btn" onclick="exportSubscribers()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-                        <polyline points="7 10 12 15 15 15"/>
-                        <line x1="12" y1="15" x2="12" y2="3"/>
-                    </svg>
-                    Export CSV
-                </button>
-                <button class="admin-btn clear-btn" onclick="clearSubscribers()">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <polyline points="3 6 5 6 21 6"/>
-                        <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                    </svg>
-                    Clear All
-                </button>
-            </div>
-            <div class="admin-article-form">
-                <input type="text" id="notifyArticleTitle" placeholder="Article title" class="admin-input">
-                <input type="text" id="notifyArticleUrl" placeholder="Article URL (e.g., antonelli-maiden-win.html)" class="admin-input">
-                <button onclick="sendCustomNotification()" class="admin-btn send-btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <line x1="22" y1="2" x2="11" y2="13"/>
-                        <polygon points="22 2 15 22 11 11 22"/>
-                    </svg>
-                    Send Custom Notification
-                </button>
-            </div>
-        </div>
-    </div>
 </body>
 </html>
