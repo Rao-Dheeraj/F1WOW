@@ -2815,6 +2815,26 @@ body::before {
     box-shadow: 0 4px 15px rgba(225, 48, 108, 0.4);
 }
 
+.share-btn.twitter {
+    background: #000;
+    color: var(--f1-white);
+}
+
+.share-btn.twitter:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+}
+
+.share-btn.linkedin {
+    background: #0077b5;
+    color: var(--f1-white);
+}
+
+.share-btn.linkedin:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px rgba(0, 119, 181, 0.4);
+}
+
 .share-btn svg {
     flex-shrink: 0;
 }

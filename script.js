@@ -1961,6 +1961,65 @@ function loadDirectInstagramEmbed() {
     loadInstagramEmbedScript();
 }
 
+// Dynamic Social Sharing
+function initSocialShare() {
+    // Get article metadata
+    const title = document.querySelector('meta[property="og:title"]')?.content ||
+                  document.title;
+    const url = window.location.href;
+
+    // Update share links with dynamic URLs
+    const shareLinks = {
+        twitter: document.querySelector('.share-btn.twitter'),
+        facebook: document.querySelector('.share-btn.facebook'),
+        linkedin: document.querySelector('.share-btn.linkedin'),
+        whatsapp: document.querySelector('.share-btn.whatsapp')
+    };
+
+    if (shareLinks.twitter) {
+        shareLinks.twitter.href = `https://twitter.com/intent/tweet?text=${encodeURIComponent(title)}&url=${encodeURIComponent(url)}`;
+    }
+    if (shareLinks.facebook) {
+        shareLinks.facebook.href = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`;
+    }
+    if (shareLinks.linkedin) {
+        shareLinks.linkedin.href = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(url)}`;
+    }
+    if (shareLinks.whatsapp) {
+        shareLinks.whatsapp.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(title + ' ' + url)}`;
+    }
+}
+
+// Copy Link Function (enhanced)
+function copyArticleLink() {
+    const url = window.location.href;
+    navigator.clipboard.writeText(url).then(() => {
+        const copyBtn = document.querySelector('.share-btn.copy-link');
+        if (copyBtn) {
+            const originalText = copyBtn.innerHTML;
+            copyBtn.classList.add('copied');
+            copyBtn.innerHTML = `
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="20 6 9 17 4 12"/>
+                </svg>
+                Copied!
+            `;
+            setTimeout(() => {
+                copyBtn.classList.remove('copied');
+                copyBtn.innerHTML = originalText;
+            }, 2000);
+        }
+    }).catch(() => {
+        // Fallback for older browsers
+        const input = document.createElement('input');
+        input.value = url;
+        document.body.appendChild(input);
+        input.select();
+        document.execCommand('copy');
+        document.body.removeChild(input);
+    });
+}
+
 // Theme Toggle Functionality
 function initThemeToggle() {
     const themeToggle = document.getElementById('themeToggle');
@@ -2012,6 +2071,7 @@ function initMobileMenu() {
 document.addEventListener('DOMContentLoaded', async () => {
     initThemeToggle();
     initMobileMenu();
+    initSocialShare();
     await loadInstagramEmbed();
 
     // Fallback: If embed container is still hidden, try direct embed
