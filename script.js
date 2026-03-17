@@ -552,19 +552,96 @@ function initSearch() {
     }
 }
 
-// Countdown Timer for Next Race (Japanese GP 2026 - March 27-29)
-// NOTE: Update the raceDate manually for each upcoming race
+// Countdown Timer for Next Race - Automatically advances to next race
+// Parses race dates from RACE_SCHEDULE_2026 dynamically
 function startCountdown() {
-    // Japanese GP 2026 date (March 29, 2026)
-    // TODO: Make this dynamic based on RACE_SCHEDULE_2026 with 'next: true'
-    const raceDate = new Date('2026-03-29T06:00:00Z').getTime();
+    // Helper function to parse date string like "Mar 27-29" to Date object
+    function parseRaceDate(dateStr, year = 2026) {
+        const months = {
+            'Jan': 0, 'Feb': 1, 'Mar': 2, 'Apr': 3, 'May': 4, 'Jun': 5,
+            'Jul': 6, 'Aug': 7, 'Sep': 8, 'Oct': 9, 'Nov': 10, 'Dec': 11
+        };
+
+        // Parse "Mar 27-29" format
+        const match = dateStr.match(/([A-Za-z]{3})\s+(\d+)(?:-\d+)?/);
+        if (match) {
+            const month = months[match[1]];
+            const day = parseInt(match[2]);
+            // Race day at 06:00 UTC
+            return new Date(Date.UTC(year, month, day, 6, 0, 0));
+        }
+        return null;
+    }
+
+    // Find next race (marked with next: true and not cancelled)
+    function getNextRace() {
+        return RACE_SCHEDULE_2026.find(race => race.next && !race.cancelled);
+    }
+
+    // Move to next race when current one ends
+    function advanceToNextRace() {
+        const currentRace = getNextRace();
+        if (!currentRace) return;
+
+        // Mark current race as completed
+        currentRace.completed = true;
+        currentRace.next = false;
+
+        // Find next non-cancelled race and mark as next
+        const nextRace = RACE_SCHEDULE_2026.find(race =>
+            !race.completed && !race.cancelled && race.round > currentRace.round
+        );
+        if (nextRace) {
+            nextRace.next = true;
+        }
+    }
+
+    // Get race flag emoji based on country
+    function getRaceFlag(name) {
+        const flags = {
+            'Australia': '🇦🇺', 'China': '🇨🇳', 'Japan': '🇯🇵', 'Bahrain': '🇧🇭',
+            'Saudi Arabia': '🇸🇦', 'Miami': '🇺🇸', 'Canada': '🇨🇦', 'Monaco': '🇲🇨',
+            'Spain': '🇪🇸', 'Austria': '🇦🇹', 'Great Britain': '🇬🇧',
+            'Belgium': '🇧🇪', 'Hungary': '🇭🇺', 'Netherlands': '🇳🇱',
+            'Italy': '🇮🇹', 'Azerbaijan': '🇦🇿', 'Singapore': '🇸🇬',
+            'United States': '🇺🇸', 'Mexico': '🇲🇽', 'Brazil': '🇧🇷',
+            'Las Vegas': '🇺🇸', 'Qatar': '🇶🇦', 'Abu Dhabi': '🇦🇪'
+        };
+        return flags[name] || '🏁';
+    }
 
     function updateCountdown() {
-        const now = new Date().getTime();
-        const distance = raceDate - now;
+        const nextRace = getNextRace();
+        const raceNameElement = document.querySelector('.next-race-name');
 
+        if (!nextRace) {
+            // Season over
+            if (raceNameElement) {
+                raceNameElement.textContent = '🏁 2026 Season Complete';
+            }
+            document.getElementById('countdown').innerHTML = '<div class="hero-badge">See you in 2027!</div>';
+            return;
+        }
+
+        const raceDate = parseRaceDate(nextRace.date);
+        if (!raceDate) return;
+
+        const now = new Date().getTime();
+        const raceTime = raceDate.getTime();
+        const distance = raceTime - now;
+
+        // Update race name display
+        if (raceNameElement) {
+            raceNameElement.textContent = `${getRaceFlag(nextRace.name)} ${nextRace.name} GP - Next Race`;
+        }
+
+        // Race weekend underway or ended
         if (distance < 0) {
             document.getElementById('countdown').innerHTML = '<div class="hero-badge">🏁 Race Weekend Underway!</div>';
+            // Advance to next race after race ends (24 hours after start)
+            if (distance < -86400000) { // 24 hours in milliseconds
+                advanceToNextRace();
+            }
             return;
         }
 
@@ -1048,7 +1125,7 @@ function displayUserPredictions() {
             <span class="prediction-points">${p.points > 0 ? '+' + p.points : '-'} pts</span>
             <span class="prediction-status ${safeStatus}">${safeStatus}</span>
         </div>`;
-    `).join('');
+    }).join('');
 }
 
 // Update total points
