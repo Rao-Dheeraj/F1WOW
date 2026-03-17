@@ -1,0 +1,8 @@
+{
+  "scripts": {
+    "generate-sitemap": "node scripts/generate-sitemap.js"
+  },
+  "devDependencies": {
+    "glob": "^13.0.6"
+  }
+}
