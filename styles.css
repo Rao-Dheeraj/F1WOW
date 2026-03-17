@@ -742,6 +742,8 @@ body::before {
 .articles-section {
     position: relative;
     z-index: 1;
+    margin-bottom: 120px;
+    padding-bottom: 40px;
 }
 
 .articles-grid {
@@ -2001,7 +2003,7 @@ body::before {
 
 /* Subscribe Section */
 .subscribe-section {
-    margin-top: 60px;
+    margin-top: 100px;
     padding: 60px 0;
     background: linear-gradient(135deg, rgba(225, 6, 0, 0.08) 0%, rgba(225, 6, 0, 0.03) 100%);
     border-top: 1px solid rgba(225, 6, 0, 0.2);
