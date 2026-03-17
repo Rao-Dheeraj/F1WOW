@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EmailJS Setup - Alternative Methods</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: #0a0a0a;
+            color: #eee;
+            margin: 0;
+            padding: 20px;
+        }
+        .container { max-width: 800px; margin: 0 auto; }
+        h1 { color: #E10600; }
+        .option {
+            background: #1a1a1a;
+            padding: 25px;
+            margin: 20px 0;
+            border-radius: 15px;
+            border: 2px solid #333;
+        }
+        .option:hover { border-color: #E10600; }
+        .option h2 { color: #22c55e; margin-top: 0; }
+        .option.best { border-color: #E10600; background: rgba(225, 6, 0, 0.1); }
+        .option.best h2 { color: #E10600; }
+        .step {
+            background: #222;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 8px;
+        }
+        .link {
+            display: inline-block;
+            background: #E10600;
+            color: white;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 8px;
+            margin: 10px 5px;
+            font-weight: bold;
+        }
+        .link:hover { background: #ff1a1a; }
+        .important {
+            background: rgba(34, 197, 94, 0.2);
+            border: 1px solid #22c55e;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .important strong { color: #22c55e; }
+        .warning {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid #ef4444;
+            padding: 15px;
+            border-radius: 10px;
+            margin: 20px 0;
+        }
+        .warning strong { color: #ef4444; }
+        code { background: #333; padding: 3px 8px; border-radius: 4px; font-family: monospace; }
+        .test-form {
+            background: #1a1a1a;
+            padding: 25px;
+            border-radius: 15px;
+            margin-top: 20px;
+        }
+        .test-form input {
+            width: 100%;
+            padding: 12px;
+            margin: 10px 0;
+            background: #222;
+            border: 1px solid #444;
+            color: white;
+            border-radius: 8px;
+        }
+        .test-form button {
+            width: 100%;
+            padding: 15px;
+            background: #22c55e;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .test-form button:hover { background: #16a34a; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>📧 EmailJS Setup - Alternative Methods</h1>
+
+        <div class="warning">
+            <strong>⚠️ Gmail Error:</strong> The Gmail API scopes error happens due to Google's security settings.<br>
+            <strong>Solution:</strong> Use one of the easier options below!
+        </div>
+
+        <!-- Option 1: Best -->
+        <div class="option best">
+            <h2>🏆 OPTION 1: Custom SMTP (Recommended - Works with ANY email)</h2>
+            <p>This works with <strong>any email provider</strong> - Gmail, Outlook, Yahoo, etc.</p>
+
+            <div class="step">
+                <strong>Step 1:</strong> Go to <a href="https://smtpjs.com/" target="_blank" style="color:#E10600">SMTPjs.com</a>
+            </div>
+
+            <div class="step">
+                <strong>Step 2:</strong> Click "Get Encryption Keys" (FREE - no signup needed)
+            </div>
+
+            <div class="step">
+                <strong>Step 3:</strong> Enter your email credentials:<br>
+                • <strong>Host:</strong> <code>smtp.gmail.com</code> (for Gmail)<br>
+                • <strong>Username:</strong> Your full Gmail address<br>
+                • <strong>Password:</strong> Use an <strong>App Password</strong> (not your regular password!)
+            </div>
+
+            <div class="important">
+                <strong>🔑 How to create Gmail App Password:</strong><br>
+                1. Go to <a href="https://myaccount.google.com/security" target="_blank" style="color:#22c55e">Google Account Security</a><br>
+                2. Enable <strong>2-Step Verification</strong> (if not enabled)<br>
+                3. Search for "App Passwords"<br>
+                4. Create one named "F1wow"<br>
+                5. Copy the 16-character password
+            </div>
+
+            <div class="step">
+                <strong>Step 4:</strong> SMTPjs will give you an <strong>Encryption Key</strong> - copy it!
+            </div>
+
+            <div class="step">
+                <strong>Step 5:</strong> Paste the key below to test
+            </div>
+        </div>
+
+        <!-- Option 2: EmailJS with Outlook -->
+        <div class="option">
+            <h2>📧 OPTION 2: EmailJS with Outlook (Easier than Gmail)</h2>
+            <p>Use Outlook/Hotmail instead of Gmail - fewer permission issues!</p>
+
+            <div class="step">
+                <strong>Step 1:</strong> Create account at <a href="https://www.emailjs.com/" target="_blank">EmailJS.com</a>
+            </div>
+
+            <div class="step">
+                <strong>Step 2:</strong> Click "Add New Service" → Select <strong>Outlook</strong> or <strong>Mailgun</strong>
+            </div>
+
+            <div class="step">
+                <strong>Step 3:</strong> Sign in with your Microsoft account
+            </div>
+
+            <div class="step">
+                <strong>Step 4:</strong> Copy the <strong>Service ID</strong>
+            </div>
+
+            <div class="step">
+                <strong>Step 5:</strong> Create template (same as before) and copy <strong>Template ID</strong>
+            </div>
+
+            <div class="step">
+                <strong>Step 6:</strong> Get <strong>Public Key</strong> from Account settings
+            </div>
+        </div>
+
+        <!-- Option 3: Mailgun -->
+        <div class="option">
+            <h2>📬 OPTION 3: Mailgun (Professional - Free tier available)</h2>
+            <p>More setup but very reliable - 5000 free emails/month!</p>
+
+            <div class="step">
+                <strong>Step 1:</strong> Sign up at <a href="https://www.mailgun.com/" target="_blank">Mailgun.com</a>
+            </div>
+
+            <div class="step">
+                <strong>Step 2:</strong> Verify your email domain
+            </div>
+
+            <div class="step">
+                <strong>Step 3:</strong> Get your <strong>API Key</strong> from dashboard
+            </div>
+
+            <div class="important">
+                This is the professional option - most reliable for production use!
+            </div>
+        </div>
+
+        <!-- Test Form -->
+        <div class="test-form">
+            <h2>🧪 Test Your Configuration</h2>
+
+            <h3 style="color: #E10600;">Method: SMTPjs (Recommended)</h3>
+            <input type="text" id="smtpKey" placeholder="Paste SMTPjs Encryption Key here">
+            <input type="email" id="testEmail" value="yadavdheeraj129@gmail.com" placeholder="Your email to receive test">
+            <button onclick="testSMTP()">📧 Send Test Email (SMTPjs)</button>
+            <div id="smtpResult" style="margin-top:15px; padding:15px; border-radius:8px; display:none;"></div>
+
+            <hr style="border-color:#333; margin:30px 0;">
+
+            <h3 style="color: #3b82f6;">Method: EmailJS (Outlook/Mailgun)</h3>
+            <input type="text" id="publicKey" placeholder="Public Key (user_xxx)">
+            <input type="text" id="serviceId" placeholder="Service ID (service_xxx)">
+            <input type="text" id="templateId" placeholder="Template ID (template_xxx)">
+            <button onclick="testEmailJS()">📧 Send Test Email (EmailJS)</button>
+            <div id="emailjsResult" style="margin-top:15px; padding:15px; border-radius:8px; display:none;"></div>
+        </div>
+
+        <div class="important" style="text-align:center;">
+            <strong>💡 Tip:</strong> Try SMTPjs first - it's the easiest and works with any email!
+        </div>
+    </div>
+
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script>
+        function testSMTP() {
+            const key = document.getElementById('smtpKey').value.trim();
+            const email = document.getElementById('testEmail').value.trim();
+            const result = document.getElementById('smtpResult');
+
+            if (!key || !email) {
+                result.style.display = 'block';
+                result.style.background = 'rgba(239, 68, 68, 0.2)';
+                result.style.color = '#ef4444';
+                result.innerHTML = '❌ Please enter both Encryption Key and Email';
+                return;
+            }
+
+            result.style.display = 'block';
+            result.style.background = 'rgba(59, 130, 246, 0.2)';
+            result.style.color = '#3b82f6';
+            result.innerHTML = '⏳ Sending test email via SMTPjs...';
+
+            Email.send({
+                SecureToken: key,
+                To: email,
+                From: "f1wow@newsletter.com",
+                Subject: "🏁 Welcome to F1wow Newsletter!",
+                Body: `
+                    <div style="font-family: Arial, sans-serif; background: #0a0a0a; padding: 20px;">
+                        <div style="max-width: 600px; margin: 0 auto; background: #1a1a1a; border-radius: 15px;">
+                            <div style="background: #E10600; padding: 30px; text-align: center;">
+                                <h1 style="color: white; margin: 0;">🏎️ F1WOW</h1>
+                            </div>
+                            <div style="padding: 30px;">
+                                <h2 style="color: #E10600;">Welcome to F1wow!</h2>
+                                <p style="color: #ccc;">Thank you for subscribing! You're now part of the F1wow family.</p>
+                                <p style="color: #888;">We'll notify you whenever we publish a new article.</p>
+                            </div>
+                        </div>
+                    </div>
+                `
+            }).then(
+                message => {
+                    result.style.background = 'rgba(34, 197, 94, 0.2)';
+                    result.style.color = '#22c55e';
+                    result.innerHTML = '✅ SUCCESS! Check your inbox at ' + email + '<br><br><strong>Provide this SMTP Key to Claude to update your website:</strong><br><code>' + key + '</code>';
+                }
+            ).catch(
+                error => {
+                    result.style.background = 'rgba(239, 68, 68, 0.2)';
+                    result.style.color = '#ef4444';
+                    result.innerHTML = '❌ Error: ' + error + '<br><br>Make sure your SMTP Key is correct!';
+                }
+            );
+        }
+
+        function testEmailJS() {
+            const publicKey = document.getElementById('publicKey').value.trim();
+            const serviceId = document.getElementById('serviceId').value.trim();
+            const templateId = document.getElementById('templateId').value.trim();
+            const email = document.getElementById('testEmail').value.trim();
+            const result = document.getElementById('emailjsResult');
+
+            if (!publicKey || !serviceId || !templateId || !email) {
+                result.style.display = 'block';
+                result.style.background = 'rgba(239, 68, 68, 0.2)';
+                result.style.color = '#ef4444';
+                result.innerHTML = '❌ Please fill in all EmailJS fields';
+                return;
+            }
+
+            result.style.display = 'block';
+            result.style.background = 'rgba(59, 130, 246, 0.2)';
+            result.style.color = '#3b82f6';
+            result.innerHTML = '⏳ Sending test email via EmailJS...';
+
+            emailjs.init(publicKey);
+
+            emailjs.send(serviceId, templateId, {
+                to_email: email,
+                to_name: email.split('@')[0]
+            }).then(function(response) {
+                result.style.background = 'rgba(34, 197, 94, 0.2)';
+                result.style.color = '#22c55e';
+                result.innerHTML = '✅ SUCCESS! Check your inbox at ' + email + '<br><br><strong>Provide these IDs to Claude:</strong><br>Public Key: ' + publicKey + '<br>Service ID: ' + serviceId + '<br>Template ID: ' + templateId;
+            }).catch(function(error) {
+                result.style.background = 'rgba(239, 68, 68, 0.2)';
+                result.style.color = '#ef4444';
+                result.innerHTML = '❌ Error: ' + JSON.stringify(error);
+            });
+        }
+    </script>
+</body>
+</html>

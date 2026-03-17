@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Instagram Embed Debug</title>
+    <style>
+        body {
+            font-family: monospace;
+            padding: 20px;
+            background: #1a1a2e;
+            color: #fff;
+        }
+        .debug {
+            background: #2a2a3e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>Instagram Embed Debug Test</h1>
+
+    <div class="debug" id="debug">
+        <p>Checking page detection...</p>
+    </div>
+
+    <div class="instagram-embed-container" id="instagramEmbed" style="display: none; margin: 30px 0;">
+        <!-- Instagram embed will be dynamically loaded here -->
+    </div>
+
+    <script src="script.js"></script>
+    <script>
+        // Debug info
+        const debug = document.getElementById('debug');
+        const articleFile = window.location.pathname.split('/').pop();
+
+        debug.innerHTML = `
+            <p>Full pathname: ${window.location.pathname}</p>
+            <p>Extracted filename: ${articleFile}</p>
+            <p>Article link in data.json: antonelli-maiden-win.html</p>
+            <p>Match: ${articleFile === 'antonelli-maiden-win.html' ? '✓ YES' : '✗ NO'}</p>
+        `;
+
+        // Manually trigger the embed for testing
+        document.addEventListener('DOMContentLoaded', async () => {
+            debug.innerHTML += '<p>Waiting for DOMContentLoaded and embed load...</p>';
+
+            // Wait for the main script to run
+            setTimeout(async () => {
+                const embedContainer = document.getElementById('instagramEmbed');
+
+                // Check if container is visible
+                if (embedContainer && embedContainer.style.display !== 'none') {
+                    debug.innerHTML += '<p style="color: #4f4;">✓ Embed container is visible!</p>';
+                } else {
+                    debug.innerHTML += '<p style="color: #f44;">✗ Embed container not visible - trying manual load...</p>';
+
+                    // Try manual load
+                    try {
+                        const response = await fetch('data.json');
+                        const data = await response.json();
+                        const sourceLink = data.latestPost.sourceLink;
+
+                        embedContainer.innerHTML = `
+                            <blockquote class="instagram-media" data-instgrm-captioned data-instgrm-permalink="${sourceLink}" data-instgrm-version="14" style=" background:#FFF; border:0; border-radius:3px; box-shadow:0 0 1px 0 rgba(0,0,0,0.5),0 1px 10px 0 rgba(0,0,0,0.15); margin: 1px; max-width:658px; min-width:326px; padding:0; width:99.375%; width:-webkit-calc(100% - 2px); width:calc(100% - 2px);">
+                                <div style="padding:16px;">
+                                    <a href="${sourceLink}" style=" background:#FFFFFF; line-height:0; padding:0 0; text-align:center; text-decoration:none; width:100%;" target="_blank">
+                                        <div style=" display: flex; flex-direction: row; align-items: center;">
+                                            <div style="background-color: #F4F4F4; border-radius: 50%; flex-grow: 0; height: 40px; margin-right: 14px; width: 40px;"></div>
+                                            <div style="display: flex; flex-direction: column; flex-grow: 1; justify-content: center;">
+                                                <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; margin-bottom: 6px; width: 100px;"></div>
+                                                <div style=" background-color: #F4F4F4; border-radius: 4px; flex-grow: 0; height: 14px; width: 60px;"></div>
+                                            </div>
+                                        </div>
+                                        <div style="padding: 19% 0;"></div>
+                                        <div style="display:block; height:50px; margin:0 auto 12px; width:50px;"><svg width="50px" height="50px" viewBox="0 0 60 60" version="1.1"><g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd"><g transform="translate(-511.000000, -20.000000)" fill="#000000"><g><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073z"/></g></g></svg></div>
+                                    </a>
+                                </div>
+                            </blockquote>
+                        `;
+                        embedContainer.style.display = 'block';
+                        debug.innerHTML += '<p style="color: #4f4;">✓ Manual embed HTML inserted!</p>';
+
+                        // Load Instagram script
+                        if (!window.instgrm) {
+                            const script = document.createElement('script');
+                            script.src = 'https://www.instagram.com/embed.js';
+                            script.onload = () => {
+                                debug.innerHTML += '<p style="color: #4f4;">✓ Instagram script loaded!</p>';
+                                if (window.instgrm) {
+                                    window.instgrm.Embeds.process();
+                                    debug.innerHTML += '<p style="color: #4f4;">✓ Instagram embeds processed!</p>';
+                                }
+                            };
+                            document.body.appendChild(script);
+                            debug.innerHTML += '<p>Loading Instagram script...</p>';
+                        }
+                    } catch (e) {
+                        debug.innerHTML += `<p style="color: #f44;">Error: ${e.message}</p>`;
+                    }
+                }
+            }, 1000);
+        });
+    </script>
+</body>
+</html>

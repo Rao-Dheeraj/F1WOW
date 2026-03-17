@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Predictor Debug Test</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #15151e;
+            color: white;
+        }
+        select {
+            width: 100%;
+            max-width: 300px;
+            padding: 15px;
+            background: #1a1a2e;
+            border: 2px solid #333;
+            border-radius: 8px;
+            color: #ffffff;
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        .log {
+            background: #2a2a3e;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 20px 0;
+            font-family: monospace;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <h1>Predictor Debug Test</h1>
+
+    <div>
+        <label>Race Selector:</label>
+        <select id="raceSelect">
+            <option value="">-- Choose a Race --</option>
+        </select>
+    </div>
+
+    <div>
+        <label>Driver Selector:</label>
+        <select id="driverSelect">
+            <option value="">Select Driver</option>
+        </select>
+    </div>
+
+    <div class="log" id="log">Loading...</div>
+
+    <script>
+        const logDiv = document.getElementById('log');
+
+        function log(msg) {
+            logDiv.innerHTML += '<br>' + msg;
+            console.log(msg);
+        }
+
+        // Test data
+        const RACES = [
+            { round: 3, name: 'Japan', location: 'Suzuka', date: 'Mar 27-29' },
+            { round: 6, name: 'Monaco', location: 'Monte Carlo', date: 'May 22-25' }
+        ];
+
+        const DRIVERS = [
+            { name: 'Max Verstappen', team: 'Red Bull Racing' },
+            { name: 'Lando Norris', team: 'McLaren' },
+            { name: 'Charles Leclerc', team: 'Ferrari' }
+        ];
+
+        log('Testing race selector...');
+        const raceSelect = document.getElementById('raceSelect');
+        log('raceSelect element: ' + raceSelect);
+        log('Initial options: ' + raceSelect.options.length);
+
+        // Populate races
+        const raceOptions = RACES.map(race =>
+            `<option value="${race.round}">Round ${race.round}: ${race.name} GP (${race.date})</option>`
+        ).join('');
+
+        raceSelect.innerHTML = '<option value="">-- Choose a Race --</option>' + raceOptions;
+        log('After populate - options: ' + raceSelect.options.length);
+
+        log('<br>Testing driver selector...');
+        const driverSelect = document.getElementById('driverSelect');
+        const driverOptions = DRIVERS.map(driver =>
+            `<option value="${driver.name}">${driver.name}</option>`
+        ).join('');
+
+        driverSelect.innerHTML = '<option value="">Select Driver</option>' + driverOptions;
+        log('After populate - driver options: ' + driverSelect.options.length);
+
+        log('<br>Test complete! Check the dropdowns above.');
+
+        // Test selecting a value
+        setTimeout(() => {
+            raceSelect.selectedIndex = 1;
+            log('Selected race value: ' + raceSelect.value);
+            log('Selected race text: ' + raceSelect.options[raceSelect.selectedIndex].text);
+        }, 1000);
+    </script>
+</body>
+</html>

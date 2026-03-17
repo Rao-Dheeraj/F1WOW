@@ -116,6 +116,13 @@ body::before {
     transform: translateY(-2px);
 }
 
+.f1wow-logo {
+    height: 30px;
+    width: auto;
+    object-fit: contain;
+}
+}
+
 .follower-counter {
     display: flex;
     align-items: center;

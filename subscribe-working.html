@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>F1wow Subscribe</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            padding: 40px;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .container {
+            max-width: 500px;
+            width: 90%;
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #E10600;
+            text-align: center;
+        }
+        h1 { color: white; margin-bottom: 20px; }
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background: #222;
+            color: white;
+            font-size: 1rem;
+            margin-bottom: 15px;
+        }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #E10600;
+            border: none;
+            color: white;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+        button:hover { background: #ff1a1a; }
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        .message.success { background: rgba(34, 197, 94, 0.2); color: #22c55e; }
+        .message.error { background: rgba(239, 68, 68, 0.2); color: #ef4444; }
+        .message.show { display: block; }
+        .setup-box {
+            background: rgba(59, 130, 246, 0.1);
+            border: 1px solid #3b82f6;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: left;
+            margin-bottom: 20px;
+        }
+        .setup-box h3 { color: #3b82f6; margin-top: 0; }
+        .setup-box ol { color: #aaa; line-height: 1.6; }
+        .setup-box code { background: #222; padding: 2px 6px; border-radius: 4px; color: #E10600; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="setup-box">
+            <h3>⚠️ One-Time Setup Required</h3>
+            <ol>
+                <li>Go to <a href="https://www.emailjs.com/" target="_blank" style="color:#E10600">EmailJS.com</a> and create free account</li>
+                <li>Add Email Service (Gmail recommended)</li>
+                <li>Create Email Template with: <code>{{to_email}}</code>, <code>{{to_name}}</code>, <code>{{message}}</code></li>
+                <li>Copy your <code>SERVICE_ID</code>, <code>TEMPLATE_ID</code>, <code>PUBLIC_KEY</code></li>
+                <li>Paste them in the code below</li>
+            </ol>
+        </div>
+
+        <h1>🏎️ F1wow Newsletter</h1>
+        <input type="email" id="email" placeholder="Enter your email" value="yadavdheeraj129@gmail.com">
+        <button onclick="subscribe()">Subscribe Now</button>
+        <div id="message" class="message"></div>
+    </div>
+
+    <script type="text/javascript">
+        // ========== CONFIGURE THESE ==========
+        const EMAILJS_PUBLIC_KEY = "YOUR_PUBLIC_KEY_HERE";
+        const EMAILJS_SERVICE_ID = "YOUR_SERVICE_ID";
+        const EMAILJS_TEMPLATE_ID = "YOUR_TEMPLATE_ID";
+        // ====================================
+
+        (function(){
+            // Only initialize if keys are configured
+            if (EMAILJS_PUBLIC_KEY !== "YOUR_PUBLIC_KEY_HERE") {
+                emailjs.init(EMAILJS_PUBLIC_KEY);
+            }
+        })();
+
+        async function subscribe() {
+            const email = document.getElementById('email').value.trim();
+            const messageDiv = document.getElementById('message');
+
+            if (!email || !email.includes('@')) {
+                showMessage('Please enter a valid email', 'error');
+                return;
+            }
+
+            if (EMAILJS_PUBLIC_KEY === "YOUR_PUBLIC_KEY_HERE") {
+                showMessage('Please configure EmailJS keys first (see instructions above)', 'error');
+                return;
+            }
+
+            try {
+                const btn = document.querySelector('button');
+                btn.textContent = 'Subscribing...';
+                btn.disabled = true;
+
+                await emailjs.send(EMAILJS_SERVICE_ID, EMAILJS_TEMPLATE_ID, {
+                    to_email: email,
+                    to_name: email.split('@')[0],
+                    message: 'Welcome to F1wow! 🏎️\n\nYou have successfully subscribed to our newsletter.\n\nYou will receive:\n• Latest F1 news\n• Race results\n• Driver updates\n• Team news\n\n— Team F1wow'
+                });
+
+                // Store locally
+                let subs = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
+                if (!subs.find(s => s.email === email)) {
+                    subs.push({ email, date: new Date().toISOString() });
+                    localStorage.setItem('f1wow_subscribers', JSON.stringify(subs));
+                }
+
+                showMessage('✅ Welcome email sent to ' + email + '! Check your inbox.', 'success');
+                btn.textContent = 'Subscribed! ✓';
+
+            } catch (error) {
+                console.error(error);
+                showMessage('Error: ' + error.message, 'error');
+                document.querySelector('button').textContent = 'Subscribe Now';
+                document.querySelector('button').disabled = false;
+            }
+        }
+
+        function showMessage(text, type) {
+            const msg = document.getElementById('message');
+            msg.textContent = text;
+            msg.className = 'message show ' + type;
+        }
+    </script>
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+</body>
+</html>

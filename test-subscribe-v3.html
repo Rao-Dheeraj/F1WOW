@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Subscribe Test v3 - F1wow</title>
+    <style>
+        * { box-sizing: border-box; }
+        body {
+            padding: 40px;
+            background: #0a0a0a;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Segoe UI', sans-serif;
+        }
+        .container {
+            max-width: 500px;
+            width: 90%;
+            background: #1a1a1a;
+            padding: 40px;
+            border-radius: 20px;
+            border: 1px solid #E10600;
+            text-align: center;
+        }
+        h1 { color: white; margin-bottom: 10px; }
+        p { color: #aaa; margin-bottom: 25px; line-height: 1.5; }
+        .form-group { margin-bottom: 20px; }
+        input {
+            width: 100%;
+            padding: 15px;
+            border: 2px solid #333;
+            border-radius: 10px;
+            background: #222;
+            color: white;
+            font-size: 1rem;
+        }
+        input:focus { outline: none; border-color: #E10600; }
+        button {
+            width: 100%;
+            padding: 15px;
+            background: #E10600;
+            border: none;
+            color: white;
+            border-radius: 10px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        button:hover { background: #ff1a1a; }
+        button:disabled { opacity: 0.6; cursor: not-allowed; }
+        .message {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            display: none;
+        }
+        .message.success { background: rgba(34, 197, 94, 0.2); color: #22c55e; border: 1px solid #22c55e; }
+        .message.error { background: rgba(239, 68, 68, 0.2); color: #ef4444; border: 1px solid #ef4444; }
+        .message.show { display: block; }
+        .debug {
+            margin-top: 20px;
+            padding: 15px;
+            background: #222;
+            border-radius: 10px;
+            font-family: monospace;
+            font-size: 11px;
+            color: #aaa;
+            text-align: left;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏎️ F1wow Newsletter</h1>
+        <p>Subscribe and get a <strong>welcome email instantly</strong>!</p>
+
+        <form id="subscribeForm">
+            <div class="form-group">
+                <input type="email" id="email" name="email" placeholder="Enter your email" required value="yadavdheeraj129@gmail.com">
+            </div>
+            <button type="submit" id="submitBtn">
+                <span id="btnText">Subscribe Now</span>
+            </button>
+        </form>
+
+        <div id="message" class="message"></div>
+        <div id="debug" class="debug">Ready to test...</div>
+    </div>
+
+    <script type="module">
+        // Using Web3Forms - FREE service that sends confirmation email to subscriber
+        import Email from 'https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js';
+
+        (function(){
+            emailjs.init("dQG4B-q-K8Y4R5JvO"); // Public test key
+        })();
+
+        document.getElementById('subscribeForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const email = document.getElementById('email').value.trim();
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const messageDiv = document.getElementById('message');
+            const debugDiv = document.getElementById('debug');
+
+            // Email validation
+            const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailRegex.test(email)) {
+                showMessage('Please enter a valid email address', 'error');
+                return;
+            }
+
+            // Check localStorage
+            let subscribers = JSON.parse(localStorage.getItem('f1wow_subscribers') || '[]');
+            const exists = subscribers.some(sub => sub.email === email);
+            if (exists) {
+                showMessage('You are already subscribed!', 'error');
+                return;
+            }
+
+            // Show loading
+            submitBtn.disabled = true;
+            btnText.textContent = 'Sending welcome email...';
+            debugDiv.innerHTML = 'Initiating...<br>';
+
+            try {
+                // Store in localStorage first
+                subscribers.push({
+                    email: email,
+                    date: new Date().toISOString()
+                });
+                localStorage.setItem('f1wow_subscribers', JSON.stringify(subscribers));
+
+                debugDiv.innerHTML += '✓ Stored in localStorage<br>';
+                debugDiv.innerHTML += '✓ Sending welcome email via EmailJS...<br>';
+
+                // Send welcome email using EmailJS
+                const templateParams = {
+                    to_email: email,
+                    to_name: email.split('@')[0],
+                    message: 'Welcome to F1wow! You will receive the latest F1 news, race results, and exclusive content.',
+                };
+
+                await emailjs.send('service_5xt866b', 'template_welcome', templateParams);
+
+                debugDiv.innerHTML += '✓ Email sent successfully!<br>';
+                showMessage('Welcome email sent! Check your inbox.', 'success');
+                btnText.textContent = 'Subscribed! ✓';
+                document.getElementById('email').value = '';
+
+            } catch (error) {
+                debugDiv.innerHTML += '✗ Error: ' + error.message + '<br>';
+                debugDiv.innerHTML += 'Trying alternative method...<br>';
+
+                // Fallback: Use FormSubmit.co
+                try {
+                    const formData = new FormData();
+                    formData.append('email', email);
+                    formData.append('_subject', '🏁 Welcome to F1wow!');
+                    formData.append('_captcha', 'false');
+
+                    await fetch('https://formsubmit.co/yadavdheeraj129@gmail.com', {
+                        method: 'POST',
+                        body: formData
+                    });
+
+                    debugDiv.innerHTML += '✓ Subscribed via FormSubmit<br>';
+                    showMessage('Subscribed! Check your inbox.', 'success');
+                    btnText.textContent = 'Subscribed! ✓';
+                } catch (fallbackError) {
+                    debugDiv.innerHTML += '✗ Fallback also failed: ' + fallbackError.message + '<br>';
+                    showMessage('Subscribed locally only.', 'success');
+                    btnText.textContent = 'Subscribed! ✓';
+                }
+            } finally {
+                setTimeout(() => {
+                    submitBtn.disabled = false;
+                    btnText.textContent = 'Subscribe Now';
+                }, 3000);
+            }
+        });
+
+        function showMessage(text, type) {
+            const messageDiv = document.getElementById('message');
+            messageDiv.textContent = text;
+            messageDiv.className = 'message show ' + type;
+        }
+    </script>
+</body>
+</html>
