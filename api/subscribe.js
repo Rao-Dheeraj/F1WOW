@@ -2,9 +2,17 @@
 // Free hosting, no authentication required for basic usage
 
 export default async function handler(req, res) {
-    // CORS headers
+    // CORS headers - restrict to allowed origins
+    const allowedOrigins = [
+        'https://motorsports-news.github.io',
+        'http://localhost:3000',
+        'http://127.0.0.1:3000'
+    ];
+    const origin = req.headers.origin;
+    if (allowedOrigins.includes(origin)) {
+        res.setHeader('Access-Control-Allow-Origin', origin);
+    }
     res.setHeader('Access-Control-Allow-Credentials', true);
-    res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
 
     if (req.method === 'OPTIONS') {
@@ -44,7 +52,7 @@ export default async function handler(req, res) {
 
         // Store subscriber (in production, use a database like Vercel Postgres)
         // For now, we'll simulate success
-        console.log('New subscriber:', email);
+        // console.log('New subscriber:', email); // Removed: don't log emails
 
         return res.status(200).json({
             success: true,
@@ -58,7 +66,8 @@ export default async function handler(req, res) {
         const { articleTitle, articleUrl, adminKey } = body;
 
         // Simple admin key check (prevent abuse)
-        const VALID_KEY = 'f1wow-2026-newsletter'; // You can change this
+        // Use environment variable for admin key (set in Vercel/production)
+        const VALID_KEY = process.env.ADMIN_KEY || 'f1wow-2026-newsletter';
         if (adminKey !== VALID_KEY) {
             return res.status(403).json({ error: 'Invalid admin key' });
         }
