@@ -1027,6 +1027,7 @@ function initSubmitPrediction() {
         // Update UI
         displayUserPredictions();
         updateTotalPoints();
+        loadLeaderboard(); // Refresh leaderboard to show new user
 
         // Reset form
         document.getElementById('firstPlace').value = '';
@@ -1156,25 +1157,16 @@ function loadLeaderboard() {
         userPoints[p.username] += p.points || 0;
     });
 
-    // Add some sample leaderboard data if empty
+    // Show "no predictions" message if truly empty
     if (Object.keys(userPoints).length === 0) {
-        const sampleUsers = [
-            { name: 'Tifosi_Fan', points: 125 },
-            { name: 'MaxVer33', points: 98 },
-            { name: 'LewisFan7', points: 87 },
-            { name: 'F1Expert', points: 75 },
-            { name: 'RaceWinner', points: 62 }
-        ];
-
-        sampleUsers.forEach(user => {
-            userPoints[user.name] = user.points;
-        });
+        container.innerHTML = '<p style="color: var(--f1-light-gray); text-align: center; padding: 20px;">No predictions yet. Be the first to predict!</p>';
+        return;
     }
 
-    // Convert to array and sort
+    // Convert to array and sort (by points descending, then by name for ties)
     const leaderboard = Object.entries(userPoints)
         .map(([name, points]) => ({ name, points }))
-        .sort((a, b) => b.points - a.points)
+        .sort((a, b) => b.points - a.points || a.name.localeCompare(b.name))
         .slice(0, 10);
 
     // Get current user
