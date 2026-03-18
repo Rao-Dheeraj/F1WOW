@@ -1,87 +1,87 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://motorsports-news.github.io/F1WOW/verstappen-article.html</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://motorsports-news.github.io/F1WOW/subscribe.html</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.6</priority>
-  </url>
-  <url>
-    <loc>https://motorsports-news.github.io/F1WOW/subs.html</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
-    <loc>https://motorsports-news.github.io/F1WOW/regulations-2026-article.html</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://motorsports-news.github.io/F1WOW/predictor.html</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.7</priority>
-  </url>
-  <url>
     <loc>https://motorsports-news.github.io/F1WOW/index.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-18</lastmod>
     <changefreq>daily</changefreq>
     <priority>1</priority>
   </url>
   <url>
-    <loc>https://motorsports-news.github.io/F1WOW/china-gp.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://motorsports-news.github.io/F1WOW/australia-gp.html</loc>
+    <lastmod>2026-03-02</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
-    <loc>https://motorsports-news.github.io/F1WOW/championship.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://motorsports-news.github.io/F1WOW/china-gp.html</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://motorsports-news.github.io/F1WOW/japan-gp-2026.html</loc>
+    <lastmod>2026-03-18</lastmod>
     <changefreq>weekly</changefreq>
-    <priority>0.7</priority>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://motorsports-news.github.io/F1WOW/antonelli-maiden-win.html</loc>
+    <lastmod>2026-03-15</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://motorsports-news.github.io/F1WOW/alonso-vibrations-retirement.html</loc>
+    <lastmod>2026-03-12</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://motorsports-news.github.io/F1WOW/verstappen-article.html</loc>
+    <lastmod>2026-03-14</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://motorsports-news.github.io/F1WOW/regulations-2026-article.html</loc>
+    <lastmod>2026-03-10</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
   </url>
   <url>
     <loc>https://motorsports-news.github.io/F1WOW/cancellation-article.html</loc>
+    <lastmod>2026-03-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.9</priority>
+  </url>
+  <url>
+    <loc>https://motorsports-news.github.io/F1WOW/f1-33-day-break-japan-miami.html</loc>
     <lastmod>2026-03-17</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://motorsports-news.github.io/F1WOW/calendar.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <lastmod>2026-03-18</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://motorsports-news.github.io/F1WOW/australia-gp.html</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
-  </url>
-  <url>
-    <loc>https://motorsports-news.github.io/F1WOW/ARTICLE_TEMPLATE.html</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
+    <loc>https://motorsports-news.github.io/F1WOW/championship.html</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://motorsports-news.github.io/F1WOW/antonelli-maiden-win.html</loc>
-    <lastmod>2026-03-17</lastmod>
-    <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <loc>https://motorsports-news.github.io/F1WOW/predictor.html</loc>
+    <lastmod>2026-03-18</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.7</priority>
   </url>
   <url>
-    <loc>https://motorsports-news.github.io/F1WOW/alonso-vibrations-retirement.html</loc>
-    <lastmod>2026-03-17</lastmod>
+    <loc>https://motorsports-news.github.io/F1WOW/subscribe.html</loc>
+    <lastmod>2026-03-18</lastmod>
     <changefreq>monthly</changefreq>
-    <priority>0.9</priority>
+    <priority>0.6</priority>
   </url>
 </urlset>
